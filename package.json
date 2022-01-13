@@ -1,0 +1,23 @@
+{
+  "name": "officialwebsite",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jie0817/officialWebsite.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Jie0817/officialWebsite/issues"
+  },
+  "homepage": "https://github.com/Jie0817/officialWebsite#readme",
+  "devDependencies": {
+    "express": "^4.17.2",
+    "http-proxy-middleware": "^2.0.1"
+  }
+}

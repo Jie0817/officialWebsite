@@ -1,0 +1,59 @@
+.container{
+	width: 1200px;
+	margin: auto;
+}
+.userInfo{
+	width: 100%;
+	display: flex;
+	align-items: center;
+	padding: 48px 0;
+}
+.userInfo-avatar{
+	width: 150px;
+	height: 150px;
+	position: relative;
+}
+.userInfo-avatar>img{
+	width: 100%;
+	height: 100%;
+}
+.userInfo-avatar>.edit{
+	width: 36px;
+	height: 36px;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+}
+.userInfo-name{
+	font-size: 28px;
+	color: #8461BB;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-left: 32px;
+}
+.userInfo-name>span:last-child{
+	font-size: 18px;
+	color: #918c8c;
+	margin-top: 8px;
+}
+.el-tabs__header{
+	margin: 0;
+}
+
+/* 表格 */
+.el-table .cell{
+	text-align: center;
+}
+
+/* 发布中心 */
+/* 分页 */
+.pagination{
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	margin-top: 48px;
+}
+/* .pagination .el-pager li.active{
+	color: #8461BB;
+} */

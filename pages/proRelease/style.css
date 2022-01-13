@@ -1,0 +1,56 @@
+.container{
+	width: 100%;
+	padding: 52px 0;
+}
+.content{
+	width: 1200px;
+	border: 1px solid #bca9db;
+	/* background-color: #f8f4fd; */
+	padding: 36px 48px;
+	margin: auto;
+	border-radius: 12px;
+}
+.avatar{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+.avatar>img{
+	width: 120px;
+}
+.avatar>p{
+	font-size: 24px;
+	font-weight: bold;
+	color: #515050;
+	margin-top: 18px;
+}
+.tips{
+	font-size: 18px;
+	color: #515050;
+	margin-top: 24px;
+}
+
+.demo-ruleForm{
+	margin-top: 32px;
+}
+.el-form-item__label{
+	font-size: 14px;
+	color: #515050;
+	font-weight: bold;
+}
+.label{
+	font-size: 18px;
+	font-weight: bold;
+	color: #515050;
+	margin-left: 4px;
+}
+.label-tips{
+	font-size: 14px;
+	color: #999;
+	margin: 6px 0;
+	font-weight: lighter;
+}
+
+.el-form-item--default{
+	margin-bottom: 24px;
+}

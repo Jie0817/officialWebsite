@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>个人中心</title>
+	<!-- 导入样式 -->
+	<link rel="stylesheet" href="./../../utils/element-plus/element-plus.min.css">
+	<link rel="stylesheet" href="./../../style/style.css">
+	<link rel="stylesheet" href="./style.css">
+	<!-- 导入 Vue 3 -->
+	<script src="./../../utils/vue.min.js"></script>
+	<!-- 导入组件库 -->
+	<script src="./../../utils/element-plus/element-plus.min.js"></script>
+</head>
+<body>
+	<div id="app">
+		<myheader></myheader>
+		<div class="container">
+			<div class="userInfo">
+				<div class="userInfo-avatar">
+					<img src="./../../assets/img/Avatar/1.jpg" alt="">
+					<img class="edit" src="./../../assets/img/Avatar/edit.png" alt="">
+				</div>
+				<p class="userInfo-name">
+					<span>下午好，用户名！</span>
+					<span>20000@email.com</span>
+				</p>
+			</div>
+			<el-tabs v-model="activeName" @tab-click="handleClick">
+				<el-tab-pane label="用户中心" name="first">用户中心</el-tab-pane>
+				<el-tab-pane label="发布中心" name="second">
+					<el-table :data="tableData" style="width: 100%;margin-top: 32px;" height="400px">
+						<el-table-column type="expand">
+							<template #default="props">
+								<div class="table-list-open">
+									<p>
+										<span class="table-list-open-title">发布人</span>
+										<span>{{props.row.open.name}}</span>
+									</p>
+									<p>
+										<span class="table-list-open-title">渠道商</span>
+										<span>{{props.row.open.channelBusiness}}</span>
+									</p>
+									<p>
+										<span class="table-list-open-title">工作地点</span>
+										<span>{{props.row.open.address}}</span>
+									</p>
+									<p>
+										<span class="table-list-open-title">微信</span>
+										<span>{{props.row.open.weChat}}</span>
+									</p>
+									<p>
+										<span class="table-list-open-title">邮箱</span>
+										<span>{{props.row.open.email}}</span>
+									</p>
+									<p>
+										<span class="table-list-open-title">项目要求</span>
+										<span>{{props.row.open.proRequirement}}</span>
+									</p>
+								</div>
+							</template>
+						</el-table-column>
+						<el-table-column width="100" label="#" prop="id" ></el-table-column>
+						<el-table-column width="100" label="发布时间" prop="releaseDate" ></el-table-column>
+						<el-table-column width="200" label="项目名称" prop="proName" ></el-table-column>
+						<el-table-column width="100" label="项目类型" prop="proType" ></el-table-column>
+						<el-table-column width="100" label="项目种类" prop="proCategory" ></el-table-column>
+						<el-table-column width="100" label="项目周期" prop="proCycle" ></el-table-column>
+						<el-table-column width="100" label="数据查看" prop="dataView" ></el-table-column>
+						<el-table-column width="100" label="单价" prop="price" ></el-table-column>
+						<el-table-column width="100" label="结算方式" prop="settMethod" ></el-table-column>
+						<el-table-column width="100" label="签订合同" prop="signContract" ></el-table-column>
+						<el-table-column width="200" fixed="right" label="操作" prop="signContract" >
+							<template #default>
+								<el-button type="text" size="small" @click="handleClick">
+									查看
+								</el-button>
+								<el-button type="text" size="small">下线</el-button>
+								<el-button @click="dialogVisible = true" type="text" size="small">编辑</el-button>
+								<el-button type="text" size="small">删除</el-button>
+							</template>
+						</el-table-column>
+					</el-table>
+					<div class="pagination">
+						<el-pagination layout="prev, pager, next" :total="50"></el-pagination>
+					</div>
+				</el-tab-pane>
+				<el-tab-pane label="收藏中心" name="third">
+					<el-table :data="tableData" style="width: 100%;margin-top: 32px;" height="400px">
+						<el-table-column type="expand">
+							<template #default="props">
+								<div class="table-list-open">
+									<p>
+										<span class="table-list-open-title">发布人</span>
+										<span>{{props.row.open.name}}</span>
+									</p>
+									<p>
+										<span class="table-list-open-title">渠道商</span>
+										<span>{{props.row.open.channelBusiness}}</span>
+									</p>
+									<p>
+										<span class="table-list-open-title">工作地点</span>
+										<span>{{props.row.open.address}}</span>
+									</p>
+									<p>
+										<span class="table-list-open-title">微信</span>
+										<span>{{props.row.open.weChat}}</span>
+									</p>
+									<p>
+										<span class="table-list-open-title">邮箱</span>
+										<span>{{props.row.open.email}}</span>
+									</p>
+									<p>
+										<span class="table-list-open-title">项目要求</span>
+										<span>{{props.row.open.proRequirement}}</span>
+									</p>
+								</div>
+							</template>
+						</el-table-column>
+						<el-table-column width="100" label="#" prop="id" ></el-table-column>
+						<el-table-column width="100" label="发布时间" prop="releaseDate" ></el-table-column>
+						<el-table-column width="200" label="项目名称" prop="proName" ></el-table-column>
+						<el-table-column width="100" label="项目类型" prop="proType" ></el-table-column>
+						<el-table-column width="100" label="项目种类" prop="proCategory" ></el-table-column>
+						<el-table-column width="100" label="项目周期" prop="proCycle" ></el-table-column>
+						<el-table-column width="100" label="数据查看" prop="dataView" ></el-table-column>
+						<el-table-column width="100" label="单价" prop="price" ></el-table-column>
+						<el-table-column width="100" label="结算方式" prop="settMethod" ></el-table-column>
+						<el-table-column width="100" label="签订合同" prop="signContract" ></el-table-column>
+						<el-table-column width="100" fixed="right" label="操作" prop="signContract" >
+							<template #default>
+								<el-button type="text" size="small" @click="handleClick">
+									取消收藏
+								</el-button>
+							</template>
+						</el-table-column>
+					</el-table>
+					<div class="pagination">
+						<el-pagination layout="prev, pager, next" :total="50"></el-pagination>
+					</div>
+				</el-tab-pane>
+			</el-tabs>
+		</div>
+
+
+
+		<el-dialog
+			v-model="dialogVisible"
+			title="编辑"
+			width="1000px"
+			:before-close="handleClose"
+		>
+			<el-form ref="ruleFormRef" label-position="top" :model="ruleForm" :rules="rules" label-width="120px" class="demo-ruleForm"
+			:size="formSize">
+				<el-form-item prop="proPublisher">
+					<template #label>
+						01<span class="label">项目发布方</span>
+						<p class="label-tips">您的公司或团队名称</p>
+					</template>
+					<el-input v-model="ruleForm.proPublisher"></el-input>
+				</el-form-item>
+				<el-form-item prop="proName">
+					<template #label>
+						02<span class="label">项目名称</span>
+						<p class="label-tips">请输入标题如：图片拉框急找团队</p>
+					</template>
+					<el-input v-model="ruleForm.proName"></el-input>
+				</el-form-item>
+				<el-form-item prop="proType">
+					<template #label>
+						03<span class="label">项目类型</span>
+					</template>
+					<el-radio-group v-model="ruleForm.proType">
+						<el-radio v-for="item in radio.proType" :label="item.value">{{item.text}}</el-radio>
+					</el-radio-group>
+				</el-form-item>
+				<el-form-item prop="proCategory">
+					<template #label>
+						04<span class="label">项目种类</span>
+					</template>
+					<el-radio-group v-model="ruleForm.proCategory">
+						<el-radio v-for="item in radio.proCategory" :label="item.value">{{item.text}}</el-radio>
+					</el-radio-group>
+				</el-form-item>
+				<el-form-item prop="proCycle">
+					<template #label>
+						05<span class="label">项目周期</span>
+						<p class="label-tips">请输入时间如：12个月</p>
+					</template>
+					<el-input v-model="ruleForm.proCycle"></el-input>
+				</el-form-item>
+				<el-form-item prop="proAddress">
+					<template #label>
+						06<span class="label">项目地点</span>
+						<p class="label-tips">请填写工作的城市</p>
+					</template>
+					<el-input v-model="ruleForm.proAddress"></el-input>
+				</el-form-item>
+				<el-form-item prop="dataView">
+					<template #label>
+						07<span class="label">数据查看</span>
+					</template>
+					<el-radio-group v-model="ruleForm.dataView">
+						<el-radio v-for="item in radio.dataView" :label="item.value">{{item.text}}</el-radio>
+					</el-radio-group>
+				</el-form-item>
+				<el-form-item prop="price">
+					<template #label>
+						08<span class="label">单价/小时、张、框</span>
+						<p class="label-tips">或输入：不限、整包</p>
+					</template>
+					<el-input v-model="ruleForm.price"></el-input>
+				</el-form-item>
+				<el-form-item prop="settMethod">
+					<template #label>
+						09<span class="label">结算方式</span>
+					</template>
+					<el-radio-group v-model="ruleForm.settMethod">
+						<el-radio v-for="item in radio.settMethod" :label="item.value">{{item.text}}</el-radio>
+					</el-radio-group>
+				</el-form-item>
+				<el-form-item prop="signContract">
+					<template #label>
+						10<span class="label">签订合同</span>
+					</template>
+					<el-radio-group v-model="ruleForm.signContract">
+						<el-radio v-for="item in radio.signContract" :label="item.value">{{item.text}}</el-radio>
+					</el-radio-group>
+				</el-form-item>
+				<el-form-item prop="weChat">
+					<template #label>
+						11<span class="label">微信</span>
+					</template>
+					<el-input v-model="ruleForm.weChat"></el-input>
+				</el-form-item>
+				<el-form-item prop="phone">
+					<template #label>
+						12<span class="label">联系电话</span>
+					</template>
+					<el-input v-model="ruleForm.phone"></el-input>
+				</el-form-item>
+				<el-form-item prop="email">
+					<template #label>
+						13<span class="label">电子邮箱</span>
+					</template>
+					<el-input v-model="ruleForm.email"></el-input>
+				</el-form-item>
+				<el-form-item prop="proRequirement">
+					<template #label>
+						14<span class="label">项目需求</span>
+						<p class="label-tips">请输入您的具体需求</p>
+					</template>
+					<el-input :autosize="true" v-model="ruleForm.proRequirement" type="textarea"></el-input>
+				</el-form-item>
+			</el-form>
+			<template #footer>
+				<span class="dialog-footer">
+					<el-button @click="dialogVisible = false">取消</el-button>
+					<el-button type="primary" @click="dialogVisible = false">确定</el-button>
+				</span>
+			</template>
+		</el-dialog>
+	</div>
+	<script type="module" src="./main.js"></script>
+</body>
+</html>

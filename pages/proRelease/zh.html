@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>项目发布</title>
+	<!-- 导入样式 -->
+	<link rel="stylesheet" href="./../../utils/element-plus/element-plus.min.css">
+	<link rel="stylesheet" href="./../../style/style.css">
+	<link rel="stylesheet" href="./style.css">
+	<!-- 导入 Vue 3 -->
+	<script src="./../../utils/vue.min.js"></script>
+	<!-- 导入组件库 -->
+	<script src="./../../utils/element-plus/element-plus.min.js"></script>
+</head>
+
+<body>
+	<div id="app">
+		<myheader></myheader>
+		<div class="container">
+			<div class="content">
+				<div class="avatar">
+					<img src="./../../assets/img/Avatar/1.jpg" alt="">
+					<p>项目发布</p>
+				</div>
+
+				<p class="tips">请认真填写以下信息，确保信息真实有效，方便需求方及时联系你。</p>
+
+					<el-form ref="ruleFormRef" label-position="top" :model="ruleForm" :rules="rules" label-width="120px" class="demo-ruleForm"
+						:size="formSize">
+						<el-form-item prop="proPublisher">
+							<template #label>
+								01<span class="label">项目发布方</span>
+								<p class="label-tips">您的公司或团队名称</p>
+							</template>
+							<el-input v-model="ruleForm.proPublisher"></el-input>
+						</el-form-item>
+						<el-form-item prop="proName">
+							<template #label>
+								02<span class="label">项目名称</span>
+								<p class="label-tips">请输入标题如：图片拉框急找团队</p>
+							</template>
+							<el-input v-model="ruleForm.proName"></el-input>
+						</el-form-item>
+						<el-form-item prop="proType">
+							<template #label>
+								03<span class="label">项目类型</span>
+							</template>
+							<el-radio-group v-model="ruleForm.proType">
+								<el-radio v-for="item in radio.proType" :label="item.value">{{item.text}}</el-radio>
+							</el-radio-group>
+						</el-form-item>
+						<el-form-item prop="proCategory">
+							<template #label>
+								04<span class="label">项目种类</span>
+							</template>
+							<el-radio-group v-model="ruleForm.proCategory">
+								<el-radio v-for="item in radio.proCategory" :label="item.value">{{item.text}}</el-radio>
+							</el-radio-group>
+						</el-form-item>
+						<el-form-item prop="proCycle">
+							<template #label>
+								05<span class="label">项目周期</span>
+								<p class="label-tips">请输入时间如：12个月</p>
+							</template>
+							<el-input v-model="ruleForm.proCycle"></el-input>
+						</el-form-item>
+						<el-form-item prop="proAddress">
+							<template #label>
+								06<span class="label">项目地点</span>
+								<p class="label-tips">请填写工作的城市</p>
+							</template>
+							<el-input v-model="ruleForm.proAddress"></el-input>
+						</el-form-item>
+						<el-form-item prop="dataView">
+							<template #label>
+								07<span class="label">数据查看</span>
+							</template>
+							<el-radio-group v-model="ruleForm.dataView">
+								<el-radio v-for="item in radio.dataView" :label="item.value">{{item.text}}</el-radio>
+							</el-radio-group>
+						</el-form-item>
+						<el-form-item prop="price">
+							<template #label>
+								08<span class="label">单价/小时、张、框</span>
+								<p class="label-tips">或输入：不限、整包</p>
+							</template>
+							<el-input v-model="ruleForm.price"></el-input>
+						</el-form-item>
+						<el-form-item prop="settMethod">
+							<template #label>
+								09<span class="label">结算方式</span>
+							</template>
+							<el-radio-group v-model="ruleForm.settMethod">
+								<el-radio v-for="item in radio.settMethod" :label="item.value">{{item.text}}</el-radio>
+							</el-radio-group>
+						</el-form-item>
+						<el-form-item prop="signContract">
+							<template #label>
+								10<span class="label">签订合同</span>
+							</template>
+							<el-radio-group v-model="ruleForm.signContract">
+								<el-radio v-for="item in radio.signContract" :label="item.value">{{item.text}}</el-radio>
+							</el-radio-group>
+						</el-form-item>
+						<el-form-item prop="weChat">
+							<template #label>
+								11<span class="label">微信</span>
+							</template>
+							<el-input v-model="ruleForm.weChat"></el-input>
+						</el-form-item>
+						<el-form-item prop="phone">
+							<template #label>
+								12<span class="label">联系电话</span>
+							</template>
+							<el-input v-model="ruleForm.phone"></el-input>
+						</el-form-item>
+						<el-form-item prop="email">
+							<template #label>
+								13<span class="label">电子邮箱</span>
+							</template>
+							<el-input v-model="ruleForm.email"></el-input>
+						</el-form-item>
+						<el-form-item prop="proRequirement">
+							<template #label>
+								14<span class="label">项目需求</span>
+								<p class="label-tips">请输入您的具体需求</p>
+							</template>
+							<el-input :autosize="true" v-model="ruleForm.proRequirement" type="textarea"></el-input>
+						</el-form-item>
+						<el-form-item>
+							<el-button size="large" type="primary" @click="submitForm(ruleFormRef)">发布</el-button>
+							<el-button size="large" @click="resetForm(ruleFormRef)">重置</el-button>
+						</el-form-item>
+					</el-form>
+			</div>
+		</div>
+		
+	</div>
+
+	<script type="module" src="./main.js"></script>
+</body>
+
+</html>

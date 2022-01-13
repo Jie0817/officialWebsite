@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>注册</title>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		html,
+		body {
+			width: 100%;
+			height: 100%;
+		}
+
+		body {
+
+			background: #e6e6e6;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		input {
+			background: none;
+			box-shadow: none;
+			outline: none;
+			border: none;
+			font-size: 14px;
+			border-bottom: 1px solid #ccc;
+			padding: 0.12rem 0;
+			color: #333;
+			/*常用于IOS下移除原生样式*/
+			-webkit-appearance: none;
+			/*点击高亮的颜色*/
+			-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+		}
+
+		.container {
+			background: #fff;
+			padding: 0.52rem 0.24rem;
+			border-radius: 0.24rem;
+		}
+
+		.title {
+			font-size: 0.36rem;
+			color: #333;
+			font-weight: 600;
+			letter-spacing: 0.02rem;
+		}
+
+		.from>div {
+			width: 6rem;
+			display: flex;
+			flex-direction: column;
+			margin-top: 0.32rem;
+		}
+		.from label{
+			font-size: 0.2rem;
+			color: #333;
+			margin-bottom: 0.04rem;
+		}
+		.password{
+			width: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			border-bottom: 1px solid #ccc;
+		}
+		.password input{
+			width: 80%;
+			border: none;
+		}
+		.icon {
+			width: 0.24rem;
+			height: 0.24rem;
+			fill: #999;
+		}
+		.submit{
+			width: 100%;
+			background: #8461BB;
+			color: #fff;
+			border: none;
+			padding: 0.12rem;
+			font-size: 0.18rem;
+			border-radius: 0.12rem;
+			margin-top: 0.48rem;
+		}
+		.register{
+			width: 100%;
+			font-size: 0.18rem;
+			display: block;
+			text-align: center;
+			margin-top: 0.24rem;
+			color: #8461BB;
+		}
+	</style>
+	<script>
+		(function (doc, win) {
+    var docEl = doc.documentElement,
+      resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+      recalc = function () {
+        var clientWidth = docEl.clientWidth;
+        if (!clientWidth) return;
+        if (clientWidth >= 750) {
+          docEl.style.fontSize = '100px';
+        } else {
+          docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+        }
+      };
+    if (!doc.addEventListener) return;
+    win.addEventListener(resizeEvt, recalc, false);
+    doc.addEventListener('DOMContentLoaded', recalc, false);
+  })(document, window);
+	</script>
+</head>
+
+<body>
+	<div class="container">
+		<p class="title">注册</p>
+		<div class="from">
+			<div>
+				<label for="phone">姓名</label>
+				<input id="phone" type="text" placeholder="请输入姓名" />
+			</div>
+			<div>
+				<label for="phone">手机</label>
+				<input id="phone" type="text" placeholder="请输入手机号" />
+			</div>
+			<div>
+				<label for="phone">电子邮箱</label>
+				<input id="phone" type="text" placeholder="请输入电子邮箱" />
+			</div>
+			<div>
+				<label for="password">密码</label>
+				<div class="password">
+					<input id="password" type="password" placeholder="请输入手机号" />
+					<svg class="icon" viewBox="0 0 1024 1024">
+						<path
+							d="M512 768c-183.466667 0-328.533333-85.333333-426.666667-256 98.133333-170.666667 243.2-256 426.666667-256s328.533333 85.333333 426.666667 256c-98.133333 170.666667-243.2 256-426.666667 256z m8.533333-426.666667c-128 0-256 55.466667-328.533333 170.666667 72.533333 115.2 200.533333 170.666667 328.533333 170.666667s238.933333-55.466667 311.466667-170.666667c-72.533333-115.2-183.466667-170.666667-311.466667-170.666667z m-8.533333 298.666667c-72.533333 0-128-55.466667-128-128s55.466667-128 128-128 128 55.466667 128 128-55.466667 128-128 128z m0-85.333333c25.6 0 42.666667-17.066667 42.666667-42.666667s-17.066667-42.666667-42.666667-42.666667-42.666667 17.066667-42.666667 42.666667 17.066667 42.666667 42.666667 42.666667z">
+						</path>
+					</svg>
+				</div>
+			</div>
+			<button class="submit">登录</button>
+			<a class="register" href="#">已经是用户？登录</a>
+		</div>
+	</div>
+</body>
+
+</html>
