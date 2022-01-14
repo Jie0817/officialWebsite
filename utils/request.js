@@ -84,7 +84,7 @@ service.interceptors.response.use(response => {//请求成功
 	ElementPlus.ElMessage.error(error.message)
   /***** 处理结束 *****/
   //如果不需要错误处理，以上的处理过程都可省略
-  return Promise.resolve(error.response)
+  return Promise.reject(error.response)
 })
 //4.导入文件
 export default service

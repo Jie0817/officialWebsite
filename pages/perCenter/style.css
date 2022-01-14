@@ -13,9 +13,29 @@
 	height: 150px;
 	position: relative;
 }
-.userInfo-avatar>img{
+.userInfo-avatar .avatar{
 	width: 100%;
 	height: 100%;
+}
+.el-avatar--circle{
+	position: relative;
+}
+.avatar-active{
+	width: 100px;
+	height: 40%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	/* background-color: rgba(131, 97, 187, 0.5); */
+	background-color: rgba(255, 255, 255,0.6);
+	position: absolute;
+	bottom: 0;
+}
+.icon-avatar-active{
+	width: 28px;
+	height: 28px;
+	/* fill: #fff; */
+	fill: #8461BB;
 }
 .userInfo-avatar>.edit{
 	width: 36px;
@@ -41,12 +61,62 @@
 	margin: 0;
 }
 
+/* 用户中心 */
+.userCenter .demo-ruleForm{
+	margin-top: 24px;
+}
+.userCenter .el-form-item--default{
+	margin-bottom: 24px;
+}
+
+/* 发布中心 */
 /* 表格 */
 .el-table .cell{
 	text-align: center;
 }
+/* 查看 */
+.see-ruleForm .el-radio__input.is-disabled .el-radio__inner{
+	background-color: var(--el-radio-input-bg-color);
+}
+.see-ruleForm .el-radio__input.is-disabled.is-checked .el-radio__inner{
+	border-color: var(--el-color-primary);
+  background: var(--el-color-primary);
+	cursor: not-allowed;
+}
+.see-ruleForm .el-radio__input.is-checked+.el-radio__label{
+	color: var(--el-color-primary);
+}
+.see-ruleForm .el-radio__input.is-disabled+span.el-radio__label{
+	color: var(--el-radio-text-color);
+}
+.see-ruleForm .el-radio__input.is-disabled.is-checked .el-radio__inner::after{
+	background-color: var(--el-disabled-bg-color);
+}
+.see-ruleForm .el-radio{
+	cursor: not-allowed;
+}
+/* 编辑 */
+.el-form-item__label{
+	font-size: 14px;
+	color: #515050;
+	font-weight: bold;
+}
+.label{
+	font-size: 18px;
+	font-weight: bold;
+	color: #515050;
+	margin-left: 4px;
+}
+.label-tips{
+	font-size: 14px;
+	color: #999;
+	margin: 6px 0;
+	font-weight: lighter;
+}
 
-/* 发布中心 */
+.el-form-item--default{
+	margin-bottom: 24px;
+}
 /* 分页 */
 .pagination{
 	width: 100%;

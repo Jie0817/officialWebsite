@@ -1,9 +1,11 @@
 
 body{
+	background-color: #e6e6e6;
+}
+.main{
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background-color: #e6e6e6;
 }
 .container {
 	width: 500px;

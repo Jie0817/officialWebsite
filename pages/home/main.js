@@ -1,14 +1,19 @@
  // 定义 vue3 的对象
  import { header } from './../../components/head.js'
+ import { footer } from './../../components/footer.js'
+ import { qrcode } from './../../components/qrcode.js'
+ import service from './../../utils/request.js'
  const {
 	ref,
 	reactive,
  	toRefs,
-	 onMounted
+	onMounted,
 } = Vue
 const composition = {
 	components : {
-		myheader : header
+		myheader : header,
+		myfooter : footer,
+		qrcode
 	},
 	setup() {
 		onMounted(() => {
@@ -20,7 +25,7 @@ const composition = {
 				pageNum : num,
 				pageSize : 5
 			}
-			axios.post('/api/web/project/list',d).then(res => {
+			service.post('/api/web/project/list',d).then(res => {
 				console.log(res)
 				data.loading = false
 				if(res.data.code === 200){
@@ -28,6 +33,7 @@ const composition = {
 					data.pagination.total = res.data.data.total
 					data.pagination.size = res.data.data.size
 				}else{
+					console.log('aaa');
 					ElementPlus.ElMessage({
 						message: res.data.msg,
 						type: 'error',

@@ -1,10 +1,10 @@
 export const header = {
 	template : `
-		<el-affix>
-			<div style="width : 100%;background:#fff;display : flex;justify-content: center;padding : 8px 0; border-bottom : 1px solid #e6e6e6">
+		<el-affix style="height:60px;">
+			<div style="width : 100%;height:60px;background:#fff;display : flex;justify-content: center;padding : 4px 0; border-bottom : 1px solid #e6e6e6">
 				<div style="width : 1200px;display: flex;align-items: center;justify-content: space-between;">
-					<div style="width : 32px"><img style="width : 100%" src="./../../assets/img/logo.jpg"></div>
-					<el-dropdown @command="handleCommand">
+					<div style="width : 42px"><img style="width : 100%" src="./../../assets/img/logo.png"></div>
+					<el-dropdown @command="handleCommand" v-if="user">
 						<span class="el-dropdown-link" style="display : flex;align-items: center;">
 							用户名
 							<svg style="margin-left : 8px" t="1642046247023" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2108" width="18" height="18">
@@ -20,14 +20,14 @@ export const header = {
 							</el-dropdown-menu>
 						</template>
 					</el-dropdown>
+					<el-button v-else color="#8461BB" onclick="location.href='./../login/zh.html'" plain>登录</el-button>
 				</div>
 			</div>
 		</el-affix>
 	`,
 	setup(){
-		console.log('aaa');
+		const user = sessionStorage.getItem('userInfo') ? JSON.parse(sessionStorage.getItem('userInfo')) : null
 		const handleCommand = (e) => {
-			console.log(e);
 			if(e == 0){
 				location.href = './../home/zh.html'
 				return
@@ -42,6 +42,7 @@ export const header = {
 			}
 		}
 		return {
+			user,
 			handleCommand
 		}
 	}

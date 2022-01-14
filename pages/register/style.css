@@ -1,9 +1,11 @@
 
 body{
+	background-color: #e6e6e6;
+}
+.main{
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background-color: #e6e6e6;
 }
 .container {
 	width: 500px;
@@ -40,6 +42,7 @@ body{
 	color: #fff;
 	border: none;
 	font-size: 18px;
+	margin-top: 12px;
 }
 .register{
 	width: 100%;

@@ -1,10 +1,20 @@
  // 定义 vue3 的对象
+ import {
+ 	footer
+ } from './../../components/footer.js'
+ import {
+ 	qrcode
+ } from './../../components/qrcode.js'
  const {
  	ref,
  	reactive,
  	toRefs
  } = Vue
  const composition = {
+ 	components: {
+ 		myfooter: footer,
+ 		qrcode
+ 	},
  	setup() {
  		const data = reactive({
  			ruleForm: {
@@ -31,50 +41,50 @@
  					trigger: 'blur'
  				}],
  			},
-			ruleFormRef : null
+ 			ruleFormRef: null
  		})
 
-		const submitForm = (fromValue) => {
-			fromValue.validate((valid) => {
-				if(valid){
-					const loading = ElementPlus.ElLoading.service({
-						lock: true,
-						text: '正在注册...',
-						background: 'rgba(0, 0, 0, 0.7)',
-					})
-					let data = {
-						name : fromValue.model.name,
-						phone : fromValue.model.phone,
-						email : fromValue.model.email,
-						password : fromValue.model.password
-					}
-					axios.post('/api/web/user/register',data).then(res => {
-						loading.close()
-						if(res.data.code === 200){
-							ElementPlus.ElMessage({
-								message: '注册成功',
-								type: 'success',
-								duration : 2000,
-								onClose(){
-									location.href = './../login/zh.html'
-								}
-							})
-						}else{
-							ElementPlus.ElMessage({
-								message: res.data.msg,
-								type: 'error',
-								duration : 2000
-							})
-						}
-					}).catch(() => {
-						loading.close()
-					})
-				}
-			})
-		}
+ 		const submitForm = (fromValue) => {
+ 			fromValue.validate((valid) => {
+ 				if (valid) {
+ 					const loading = ElementPlus.ElLoading.service({
+ 						lock: true,
+ 						text: '正在注册...',
+ 						background: 'rgba(0, 0, 0, 0.7)',
+ 					})
+ 					let data = {
+ 						name: fromValue.model.name,
+ 						phone: fromValue.model.phone,
+ 						email: fromValue.model.email,
+ 						password: fromValue.model.password
+ 					}
+ 					axios.post('/api/web/user/register', data).then(res => {
+ 						loading.close()
+ 						if (res.data.code === 200) {
+ 							ElementPlus.ElMessage({
+ 								message: '注册成功',
+ 								type: 'success',
+ 								duration: 2000,
+ 								onClose() {
+ 									location.href = './../login/zh.html'
+ 								}
+ 							})
+ 						} else {
+ 							ElementPlus.ElMessage({
+ 								message: res.data.msg,
+ 								type: 'error',
+ 								duration: 2000
+ 							})
+ 						}
+ 					}).catch(() => {
+ 						loading.close()
+ 					})
+ 				}
+ 			})
+ 		}
  		return {
  			...toRefs(data),
-			 submitForm
+ 			submitForm
  		}
  	}
  }
