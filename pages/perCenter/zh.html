@@ -42,11 +42,11 @@
 								<el-form-item required label="姓名" prop="name">
 									<el-input v-model="userCenter.ruleForm.name" type="text" placeholder="请输入您的姓名"></el-input>
 								</el-form-item>
-								<el-form-item required label="手机号" prop="phone">
-									<el-input v-model="userCenter.ruleForm.phone" type="text" placeholder="请输入您的手机号"></el-input>
+								<el-form-item label="手机号" prop="phone">
+									<el-input readonly v-model="userCenter.ruleForm.phone" type="text" placeholder="请输入您的手机号"></el-input>
 								</el-form-item>
-								<el-form-item required label="电子邮箱" prop="email">
-									<el-input v-model="userCenter.ruleForm.email" type="text" placeholder="请输入您的邮箱"></el-input>
+								<el-form-item label="电子邮箱" prop="email">
+									<el-input readonly  v-model="userCenter.ruleForm.email" type="text" placeholder="请输入您的邮箱"></el-input>
 								</el-form-item>
 								<el-form-item label="公司/组织" prop="company">
 									<el-input v-model="userCenter.ruleForm.company" type="text" placeholder="请输入您的公司/组织"></el-input>
@@ -118,7 +118,7 @@
 		</el-container>
 		<qrcode></qrcode>
 		<!-- 头像修改 -->
-		<el-popover :virtual-ref="popoverRef" :width="600" trigger="click" placement="bottom" virtual-triggering
+		<el-popover :virtual-ref="popoverRef" :width="600" trigger="hover" :show-after="500" placement="bottom" virtual-triggering
 			popper-style="box-shadow: rgb(14 18 22 / 35%) 0px 10px 38px -10px, rgb(14 18 22 / 20%) 0px 10px 20px -15px; padding: 20px;">
 			<template #default>
 				<el-row :gutter="20">

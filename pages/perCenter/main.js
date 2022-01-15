@@ -299,26 +299,26 @@
  			callback()
  		}
  	}
- 	const validatePhone = (rule, value, callback) => {
- 		let reg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/
- 		if (value === '') {
- 			callback(new Error('请输入手机号'));
- 		} else if (!reg.test(value)) {
- 			callback(new Error('请输入正确的手机号'))
- 		} else {
- 			callback()
- 		}
- 	}
-	const validateEmail = (rule, value, callback) => {
-		let reg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
-		if (value === '') {
-			callback(new Error('请输入您的电子邮箱'))
-		} else if (!reg.test(value)) {
-			callback(new Error('请输入正确的电子邮箱'))
-		} else {
-			callback()
-		}
-	}
+ 	// const validatePhone = (rule, value, callback) => {
+ 	// 	let reg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/
+ 	// 	if (value === '') {
+ 	// 		callback(new Error('请输入手机号'));
+ 	// 	} else if (!reg.test(value)) {
+ 	// 		callback(new Error('请输入正确的手机号'))
+ 	// 	} else {
+ 	// 		callback()
+ 	// 	}
+ 	// }
+	// const validateEmail = (rule, value, callback) => {
+	// 	let reg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
+	// 	if (value === '') {
+	// 		callback(new Error('请输入您的电子邮箱'))
+	// 	} else if (!reg.test(value)) {
+	// 		callback(new Error('请输入正确的电子邮箱'))
+	// 	} else {
+	// 		callback()
+	// 	}
+	// }
  	// const validateCompany = (rule, value, callback) => {
  	// 	if (value === '') {
  	// 		callback(new Error('请输入您的公司'))
@@ -346,14 +346,14 @@
  				validator: validateName,
  				trigger: 'blur'
  			}],
- 			phone: [{
- 				validator: validatePhone,
- 				trigger: 'blur'
- 			}],
-			email: [{
-				validator: validateEmail,
-				trigger: 'blur'
-			}],
+ 			// phone: [{
+ 			// 	validator: validatePhone,
+ 			// 	trigger: 'blur'
+ 			// }],
+			// email: [{
+			// 	validator: validateEmail,
+			// 	trigger: 'blur'
+			// }],
  			// company: [{
  			// 	validator: validateCompany,
  			// 	trigger: 'blur'
