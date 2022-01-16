@@ -7,12 +7,13 @@ export const formValidation = () => {
 		ruleForm: {
 			proPublisher: '',
 			proName: '',
-			proType: 0,
+			proType: '',
 			proCategory: '',
 			proCycle: '',
 			proAddress: '',
 			dataView: '',
 			price: '',
+			priceCondition : '',
 			settMethod: '',
 			signContract: '',
 			weChat: '',
@@ -61,6 +62,11 @@ export const formValidation = () => {
 				message: '请输入单价',
 				trigger: 'blur',
 			}, ],
+			priceCondition : [{
+				required: true,
+				message: '请选择单价方式',
+				trigger: 'change',
+			}],
 			settMethod: [{
 				required: true,
 				message: '请选择结算方式',
@@ -95,95 +101,117 @@ export const formValidation = () => {
 	})
 	const radio = {
 		proType: [{
-				value: 0,
+				value: '不限',
 				text: '不限'
 			},
 			{
-				value: 1,
+				value: '数据采集',
 				text: '数据采集'
 			},
 			{
-				value: 2,
+				value: '语音转写',
 				text: '语音转写'
 			},
 			{
-				value: 3,
+				value: '描点标注',
 				text: '描点标注'
 			},
 			{
-				value: 4,
+				value: '道路标注',
 				text: '道路标注'
 			}
 		],
 		proCategory: [{
-				value: 0,
+				value: '不限',
 				text: '不限'
 			},
 			{
-				value: 1,
+				value: '语音',
 				text: '语音'
 			},
 			{
-				value: 2,
+				value: '图片',
 				text: '图片'
 			},
 			{
-				value: 3,
+				value: '文本',
 				text: '文本'
 			},
 			{
-				value: 4,
+				value: '视频',
 				text: '视频'
 			},
 		],
 		dataView: [{
-				value: 0,
+				value: '不限',
 				text: '不限'
 			},
 			{
-				value: 1,
+				value: '有后台',
 				text: '有后台'
 			},
 			{
-				value: 2,
+				value: '无后台',
 				text: '无后台'
 			},
 			{
-				value: 3,
+				value: '打包',
 				text: '打包'
 			}
 		],
-		settMethod: [{
-				value: 0,
+		priceCondition:[{
+				value: '不限',
 				text: '不限'
 			},
 			{
-				value: 1,
+				value: '按小时',
+				text: '按小时'
+			},
+			{
+				value: '按张',
+				text: '按张'
+			},
+			{
+				value: '按框',
+				text: '按框'
+			}
+			,
+			{
+				value: '整包',
+				text: '整包'
+			}
+		],
+		settMethod: [{
+				value: '不限',
+				text: '不限'
+			},
+			{
+				value: '日结',
 				text: '日结'
 			},
 			{
-				value: 2,
+				value: '周结',
 				text: '周结'
 			},
 			{
-				value: 3,
+				value: '月结',
 				text: '月结'
 			},
 			{
-				value: 4,
+				value: '完结',
 				text: '完结'
 			}
 		],
 		signContract: [{
-				value: 0,
+				value: '不限',
 				text: '不限'
 			},
 			{
-				value: 1,
+				value: '需要',
 				text: '需要'
 			},
 			{
-				value: 2,
+				value: '不需要',
 				text: '不需要'
 			}
 		]

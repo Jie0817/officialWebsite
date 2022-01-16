@@ -14,6 +14,7 @@
 	<script src="./../../utils/vue.min.js"></script>
 	<!-- 导入组件库 -->
 	<script src="./../../utils/element-plus/element-plus.min.js"></script>
+	<script src="./../../utils/axios.min.js"></script>
 </head>
 
 <body>
@@ -27,7 +28,7 @@
 					<div class="userInfo">
 						<!-- 修改头像 -->
 						<div class="userInfo-avatar">
-							<el-avatar class="avatar" :src="'./../../assets/img/Avatar/'+avatarActive+'.png'"></el-avatar>
+							<el-avatar class="avatar" :src="'./../../assets/img/Avatar/'+avatarActive"></el-avatar>
 							<img ref="popoverRef" class="edit" src="./../../assets/img/Avatar/edit.png" alt="" />
 						</div>
 						<p class="userInfo-name">
@@ -36,8 +37,8 @@
 						</p>
 					</div>
 					<el-tabs v-model="activeName" @tab-click="handleClick">
-						<el-tab-pane label="用户中心" name="first" class="userCenter">
-							<el-form ref="ruleFormRef" label-position="top" :model="userCenter.ruleForm" status-icon
+						<el-tab-pane label="用户中心" name="0" class="userCenter">
+							<el-form ref="userRuleFormRef" label-position="top" :model="userCenter.ruleForm" status-icon
 								:rules="userCenter.rules" label-width="120px" class="demo-ruleForm">
 								<el-form-item required label="姓名" prop="name">
 									<el-input v-model="userCenter.ruleForm.name" type="text" placeholder="请输入您的姓名"></el-input>
@@ -46,25 +47,29 @@
 									<el-input readonly v-model="userCenter.ruleForm.phone" type="text" placeholder="请输入您的手机号"></el-input>
 								</el-form-item>
 								<el-form-item label="电子邮箱" prop="email">
-									<el-input readonly  v-model="userCenter.ruleForm.email" type="text" placeholder="请输入您的邮箱"></el-input>
+									<el-input readonly v-model="userCenter.ruleForm.email" type="text" placeholder="请输入您的邮箱"></el-input>
 								</el-form-item>
 								<el-form-item label="公司/组织" prop="company">
 									<el-input v-model="userCenter.ruleForm.company" type="text" placeholder="请输入您的公司/组织"></el-input>
 								</el-form-item>
-								<el-form-item required label="密码" prop="password">
+								<el-form-item label="密码" prop="password">
 									<el-input v-model="userCenter.ruleForm.password" :show-password="true" type="password"
+										placeholder="请输入您的密码"></el-input>
+								</el-form-item>
+								<el-form-item label="确认密码" prop="conPassword">
+									<el-input v-model="userCenter.ruleForm.conPassword" :show-password="true" type="password"
 										placeholder="请输入您的密码"></el-input>
 								</el-form-item>
 								<el-form-item>
 									<el-button class="submit" color="#8361bb" size="large" type="primary"
-										@click="submitForm(ruleFormRef)">
-										保存更改</el-button>
+										@click="userSubmitForm(userRuleFormRef)">保存更改</el-button>
 								</el-form-item>
 							</el-form>
 						</el-tab-pane>
-						<el-tab-pane label="发布中心" empty-text="暂无发布记录" name="second">
-							<el-table :data="pubCenter.tableData" style="width: 100%;margin-top: 32px;" height="400px">
-								<el-table-column width="100" label="#" prop="id"></el-table-column>
+						<el-tab-pane label="发布中心" empty-text="暂无发布记录" name="1">
+							<el-table v-loading="pubCenter.loading" empty-text="暂无数据" element-loading-text="加载中..."
+								:data="pubCenter.tableData" style="width: 100%;margin-top: 32px;" height="400px">
+								<!-- <el-table-column width="100" label="#" prop="id"></el-table-column>
 								<el-table-column width="100" label="发布时间" prop="releaseDate"></el-table-column>
 								<el-table-column width="200" label="项目名称" prop="proName"></el-table-column>
 								<el-table-column width="100" label="项目类型" prop="proType"></el-table-column>
@@ -72,22 +77,34 @@
 								<el-table-column width="100" label="项目周期" prop="proCycle"></el-table-column>
 								<el-table-column width="100" label="数据查看" prop="dataView"></el-table-column>
 								<el-table-column width="100" label="单价" prop="price"></el-table-column>
-								<el-table-column width="100" label="结算方式" prop="settMethod"></el-table-column>
+								<el-table-column width="100" label="结算方式" prop="settMethod"></el-table-column> -->
+
+								<el-table-column label="#" prop="id"></el-table-column>
+								<el-table-column label="发布时间" prop="createTime"></el-table-column>
+								<el-table-column width="200px" label="项目名称" prop="projectName"></el-table-column>
+								<el-table-column label="项目类型" prop="projectType"></el-table-column>
+								<el-table-column label="项目种类" prop="projectKind"></el-table-column>
+								<el-table-column label="项目周期" prop="projectCycle"></el-table-column>
+								<el-table-column label="数据查看" prop="dataView"></el-table-column>
+								<el-table-column label="单价" prop="price"></el-table-column>
+								<el-table-column label="结算方式" prop="clearingForm"></el-table-column>
 								<el-table-column width="200" fixed="right" label="操作" prop="signContract">
-									<template #default>
-										<el-button type="text" size="small" @click="handleSee">查看</el-button>
+									<template #default="props">
+										<!-- <el-button type="text" size="small" @click="handleSee">查看</el-button> -->
 										<el-button @click="handleOffline" type="text" size="small">下线</el-button>
-										<el-button @click="handleEdit" type="text" size="small">编辑</el-button>
+										<el-button @click="handleEdit(props.row)" type="text" size="small">编辑</el-button>
 										<el-button @click="handleDelete" type="text" size="small">删除</el-button>
 									</template>
 								</el-table-column>
 							</el-table>
 							<div class="pagination">
-								<el-pagination layout="prev, pager, next" :total="50"></el-pagination>
+								<el-pagination :page-size="pubCenter.pagination.size" layout="prev, pager, next"
+									:total="pubCenter.pagination.total" @current-change="getPubList"></el-pagination>
 							</div>
 						</el-tab-pane>
-						<el-tab-pane label="收藏中心" name="third">
-							<el-table :data="collCenter.tableData" empty-text="暂无收藏项目" style="width: 100%;margin-top: 32px;" height="400px">
+						<el-tab-pane label="收藏中心" name="2">
+							<el-table :data="collCenter.tableData" empty-text="暂无收藏项目" style="width: 100%;margin-top: 32px;"
+								height="400px">
 								<el-table-column width="100" label="#" prop="id"></el-table-column>
 								<el-table-column width="100" label="发布时间" prop="releaseDate"></el-table-column>
 								<el-table-column width="200" label="项目名称" prop="proName"></el-table-column>
@@ -118,13 +135,14 @@
 		</el-container>
 		<qrcode></qrcode>
 		<!-- 头像修改 -->
-		<el-popover :virtual-ref="popoverRef" :width="600" trigger="hover" :show-after="500" placement="bottom" virtual-triggering
+		<el-popover :virtual-ref="popoverRef" :width="600" trigger="hover" :show-after="500" placement="bottom"
+			virtual-triggering
 			popper-style="box-shadow: rgb(14 18 22 / 35%) 0px 10px 38px -10px, rgb(14 18 22 / 20%) 0px 10px 20px -15px; padding: 20px;">
 			<template #default>
 				<el-row :gutter="20">
 					<el-col :span="6" v-for="item in avatar" style="text-align: center;margin: 12px 0;">
 						<el-avatar :size="100" @click="handleAvatarSelect(item)">
-							<img :src="'./../../assets/img/Avatar/'+item+'.png'" alt="">
+							<img :src="'./../../assets/img/Avatar/'+item" alt="">
 							<p v-if="item == avatarActive" class="avatar-active">
 								<svg class="icon-avatar-active" viewBox="0 0 1024 1024">
 									<path
@@ -140,57 +158,57 @@
 		</el-popover>
 		<!-- 编辑 -->
 		<el-dialog v-model="pubCenter.dialogVisibleEdit" title="编辑" width="1000px" :before-close="handleClose">
-			<el-form ref="ruleFormRef" label-position="top" :model="edit.ruleForm" :rules="edit.rules" label-width="120px"
+			<el-form ref="ruleFormRef" label-position="top" :model="pubCenter.detailsData" :rules="pubCenter.rules" label-width="120px"
 				class="demo-ruleForm" :size="formSize">
-				<el-form-item prop="proPublisher">
+				<el-form-item prop="projectPublisher">
 					<template #label>
 						01<span class="label">项目发布方</span>
 						<p class="label-tips">您的公司或团队名称</p>
 					</template>
-					<el-input v-model="edit.ruleForm.proPublisher"></el-input>
+					<el-input v-model="pubCenter.detailsData.projectPublisher"></el-input>
 				</el-form-item>
-				<el-form-item prop="proName">
+				<el-form-item prop="projectName">
 					<template #label>
 						02<span class="label">项目名称</span>
 						<p class="label-tips">请输入标题如：图片拉框急找团队</p>
 					</template>
-					<el-input v-model="edit.ruleForm.proName"></el-input>
+					<el-input v-model="pubCenter.detailsData.projectName"></el-input>
 				</el-form-item>
-				<el-form-item prop="proType">
+				<el-form-item prop="projectType">
 					<template #label>
 						03<span class="label">项目类型</span>
 					</template>
-					<el-radio-group v-model="edit.ruleForm.proType">
+					<el-radio-group v-model="pubCenter.detailsData.projectType">
 						<el-radio v-for="item in radio.proType" :label="item.value">{{item.text}}</el-radio>
 					</el-radio-group>
 				</el-form-item>
-				<el-form-item prop="proCategory">
+				<el-form-item prop="projectKind">
 					<template #label>
 						04<span class="label">项目种类</span>
 					</template>
-					<el-radio-group v-model="edit.ruleForm.proCategory">
+					<el-radio-group v-model="pubCenter.detailsData.projectKind">
 						<el-radio v-for="item in radio.proCategory" :label="item.value">{{item.text}}</el-radio>
 					</el-radio-group>
 				</el-form-item>
-				<el-form-item prop="proCycle">
+				<el-form-item prop="projectCycle">
 					<template #label>
 						05<span class="label">项目周期</span>
 						<p class="label-tips">请输入时间如：12个月</p>
 					</template>
-					<el-input v-model="edit.ruleForm.proCycle"></el-input>
+					<el-input v-model="pubCenter.detailsData.projectCycle"></el-input>
 				</el-form-item>
-				<el-form-item prop="proAddress">
+				<el-form-item prop="projectAddress">
 					<template #label>
 						06<span class="label">项目地点</span>
 						<p class="label-tips">请填写工作的城市</p>
 					</template>
-					<el-input v-model="edit.ruleForm.proAddress"></el-input>
+					<el-input v-model="pubCenter.detailsData.projectAddress"></el-input>
 				</el-form-item>
 				<el-form-item prop="dataView">
 					<template #label>
 						07<span class="label">数据查看</span>
 					</template>
-					<el-radio-group v-model="edit.ruleForm.dataView">
+					<el-radio-group v-model="pubCenter.detailsData.dataView">
 						<el-radio v-for="item in radio.dataView" :label="item.value">{{item.text}}</el-radio>
 					</el-radio-group>
 				</el-form-item>
@@ -199,54 +217,54 @@
 						08<span class="label">单价/小时、张、框</span>
 						<p class="label-tips">或输入：不限、整包</p>
 					</template>
-					<el-input v-model="edit.ruleForm.price"></el-input>
+					<el-input v-model="pubCenter.detailsData.price"></el-input>
 				</el-form-item>
-				<el-form-item prop="settMethod">
+				<el-form-item prop="clearingForm">
 					<template #label>
 						09<span class="label">结算方式</span>
 					</template>
-					<el-radio-group v-model="edit.ruleForm.settMethod">
+					<el-radio-group v-model="pubCenter.detailsData.clearingForm">
 						<el-radio v-for="item in radio.settMethod" :label="item.value">{{item.text}}</el-radio>
 					</el-radio-group>
 				</el-form-item>
-				<el-form-item prop="signContract">
+				<el-form-item prop="contract">
 					<template #label>
 						10<span class="label">签订合同</span>
 					</template>
-					<el-radio-group v-model="edit.ruleForm.signContract">
+					<el-radio-group v-model="pubCenter.detailsData.contract">
 						<el-radio v-for="item in radio.signContract" :label="item.value">{{item.text}}</el-radio>
 					</el-radio-group>
 				</el-form-item>
-				<el-form-item prop="weChat">
+				<el-form-item prop="wechat">
 					<template #label>
 						11<span class="label">微信</span>
 					</template>
-					<el-input v-model="edit.ruleForm.weChat"></el-input>
+					<el-input v-model="pubCenter.detailsData.wechat"></el-input>
 				</el-form-item>
 				<el-form-item prop="phone">
 					<template #label>
 						12<span class="label">联系电话</span>
 					</template>
-					<el-input v-model="edit.ruleForm.phone"></el-input>
+					<el-input v-model="pubCenter.detailsData.phone"></el-input>
 				</el-form-item>
 				<el-form-item prop="email">
 					<template #label>
 						13<span class="label">电子邮箱</span>
 					</template>
-					<el-input v-model="edit.ruleForm.email"></el-input>
+					<el-input v-model="pubCenter.detailsData.email"></el-input>
 				</el-form-item>
-				<el-form-item prop="proRequirement">
+				<el-form-item prop="projectRequirement">
 					<template #label>
 						14<span class="label">项目需求</span>
 						<p class="label-tips">请输入您的具体需求</p>
 					</template>
-					<el-input :autosize="true" v-model="edit.ruleForm.proRequirement" type="textarea"></el-input>
+					<el-input :autosize="true" v-model="pubCenter.detailsData.projectRequirement" type="textarea"></el-input>
 				</el-form-item>
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
 					<el-button @click="pubCenter.dialogVisibleEdit = false">取消</el-button>
-					<el-button type="primary" @click="pubCenter.dialogVisibleEdit = false">确定</el-button>
+					<el-button type="primary" @click="handlePubEditSubmit">确定</el-button>
 				</span>
 			</template>
 		</el-dialog>

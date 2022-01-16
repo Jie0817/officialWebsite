@@ -94,13 +94,23 @@ span{
 	justify-content: space-between;
 }
 .el-select{
-	width: 19.5%;
+	/* width: 19.5%; */
+	width: 24%;
 }
 .el-select .el-input.is-focus .el-input__inner,.el-select .el-input__inner:focus{
 	border-color: #8461BB;
 }
 .el-select-dropdown.is-multiple .el-select-dropdown__item.selected{
 	color: #8461BB;
+}
+.query{
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	margin-top: 12px;
+}
+.el-icon--right{
+	margin-left: 6px;
 }
 
 /* 表格 */

@@ -5,6 +5,7 @@
  import {
  	qrcode
  } from './../../components/qrcode.js'
+ import service from './../../utils/request.js'
  const {
  	ref,
  	reactive,
@@ -58,7 +59,7 @@
  						email: fromValue.model.email,
  						password: fromValue.model.password
  					}
- 					axios.post('/api/web/user/register', data).then(res => {
+ 					service.post('/web/user/register', data).then(res => {
  						loading.close()
  						if (res.data.code === 200) {
  							ElementPlus.ElMessage({

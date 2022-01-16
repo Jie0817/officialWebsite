@@ -11,6 +11,10 @@
  import {
  	qrcode
  } from './../../components/qrcode.js'
+ import service from './../../utils/request.js'
+ import {
+ 	ElMessage
+ } from './../../components/ElMessage.js'
  const {
  	ref,
  	reactive,
@@ -23,42 +27,317 @@
  		qrcode
  	},
  	setup() {
-		const date = ref('上午好！')
+ 		const date = ref('上午好！')
 
-		// 获取当前时间
-		let now = new Date()
-		let hour = now.getHours() 
-		if(hour < 6) date.value = "凌晨好"
-		else if (hour < 9) date.value = "早上好"
-		else if (hour < 12) date.value = "上午好"
-		else if (hour < 14) date.value = "中午好"
-		else if (hour < 17) date.value = "下午好"
-		else if (hour < 19) date.value = "傍晚好"
-		else if (hour < 22) date.value = "晚上好"
-		else date.value = "夜里好"
-		
+ 		// 获取当前时间
+ 		let now = new Date()
+ 		let hour = now.getHours()
+ 		if (hour < 6) date.value = "凌晨好"
+ 		else if (hour < 9) date.value = "早上好"
+ 		else if (hour < 12) date.value = "上午好"
+ 		else if (hour < 14) date.value = "中午好"
+ 		else if (hour < 17) date.value = "下午好"
+ 		else if (hour < 19) date.value = "傍晚好"
+ 		else if (hour < 22) date.value = "晚上好"
+ 		else date.value = "夜里好"
+
  		const handleClick = (tab, event) => {
  			console.log(tab, event)
+			 if(tab.props.name === '1'){
+				getPubList();
+			 }
  		}
 
- 		const activeName = ref('first')
+ 		const activeName = ref('0')
 
  		//  头像
  		const avatar = [
- 			'1',
- 			'2',
- 			'3',
- 			'4',
+ 			'1.png',
+ 			'2.png',
+ 			'3.png',
+ 			'4.png',
  		]
  		const popoverRef = ref()
- 		const avatarActive = ref(1)
+ 		const avatarActive = ref(sessionStorage.getItem('userInfo') ? JSON.parse(sessionStorage.getItem('userInfo')).user.imgUrl : '1.png')
  		const handleAvatarSelect = (e) => {
- 			console.log(e);
  			avatarActive.value = e
+ 			handleEditAvatar(e)
+ 		}
+ 		const handleEditAvatar = (url) => {
+ 			const loading = ElementPlus.ElLoading.service({
+ 				lock: true,
+ 				text: '正在修改头像...',
+ 				background: 'rgba(0, 0, 0, 0.7)',
+ 			})
+ 			let data = {
+ 				imgUrl: url
+ 			}
+ 			service.post('/web/user/editUser', data).then(res => {
+ 				console.log(res)
+ 				loading.close()
+ 				if (res.data.code === 200) {
+ 					let data = {
+ 						token: JSON.parse(sessionStorage.getItem('userInfo')).token,
+ 						user: res.data.data
+ 					}
+ 					sessionStorage.setItem('userInfo', JSON.stringify(data));
+ 					ElementPlus.ElMessage({
+ 						message: '头像修改成功！',
+ 						type: 'success',
+ 						duration: 3000
+ 					})
+
+ 				} else {
+ 					if (res.data.code === 401) {
+ 						ElMessage(res.data.msg)
+ 						return
+ 					}
+ 					ElementPlus.ElMessage({
+ 						message: res.data.msg,
+ 						type: 'error',
+ 						duration: 3000
+ 					})
+ 				}
+ 			}).catch(() => {
+ 				loading.close()
+ 			})
  		}
  		// 发布中心
  		const pubCenter = reactive({
  			// tab
+ 			tableData: [],
+ 			dialogVisibleEdit: false,
+ 			dialogVisibleSee: false,
+			loading : false,
+			pagination : {
+				total : 0,
+				size : 5
+			},
+			detailsData : {},
+			rules: {
+				projectPublisher: [{
+					required: true,
+					message: '请输入发布方名称',
+					trigger: 'blur',
+				}, ],
+				projectName: [{
+					required: true,
+					message: '请输入项目名称',
+					trigger: 'blur',
+				}, ],
+				projectType: [{
+					required: true,
+					message: '请选择项目类型',
+					trigger: 'change',
+				}, ],
+				projectKind: [{
+					required: true,
+					message: '请选择项目种类',
+					trigger: 'change',
+				}, ],
+				projectCycle: [{
+					required: true,
+					message: '请输入项目周期',
+					trigger: 'blur',
+				}, ],
+				projectAddress: [{
+					required: true,
+					message: '请输入项目地点',
+					trigger: 'blur',
+				}, ],
+				dataView: [{
+					required: true,
+					message: '请选择数据查看方式',
+					trigger: 'change',
+				}, ],
+				price: [{
+					required: true,
+					message: '请输入单价',
+					trigger: 'blur',
+				}, ],
+				priceCondition : [{
+					required: true,
+					message: '请选择单价方式',
+					trigger: 'change',
+				}],
+				clearingForm: [{
+					required: true,
+					message: '请选择结算方式',
+					trigger: 'change',
+				}, ],
+				contract: [{
+					required: true,
+					message: '请选择合同签订方式',
+					trigger: 'change',
+				}, ],
+				wechat: [{
+					required: true,
+					message: '请输入您的微信',
+					trigger: 'blur',
+				}, ],
+				phone: [{
+					required: true,
+					message: '请输入您的联系电话',
+					trigger: 'blur',
+				}, ],
+				email: [{
+					required: true,
+					message: '请输入您的邮箱',
+					trigger: 'blur',
+				}, ],
+				projectRequirement: [{
+					required: true,
+					message: '请输入您的具体需求',
+					trigger: 'blur',
+				}, ],
+			}
+ 		})
+
+		// 获取发布列表
+		const getPubList = (num = 1) => {
+			console.log(num);
+			pubCenter.loading = true
+			let data = {
+				pageNum : num,
+				pageSize : 1
+			}
+			service.post('/web/project/listByUser', data).then(res => {
+				console.log(res)
+				pubCenter.loading = false
+				if (res.data.code === 200) {
+					pubCenter.tableData = res.data.data.records
+					pubCenter.pagination.total = res.data.data.total
+					pubCenter.pagination.size = res.data.data.size
+				} else {
+					if (res.data.code === 401) {
+						ElMessage(res.data.msg)
+						return
+					}
+					ElementPlus.ElMessage({
+						message: res.data.msg,
+						type: 'error',
+						duration: 3000
+					})
+				}
+			}).catch(() => {
+				pubCenter.loading = false
+			})
+		}
+ 		// 查看
+ 		const handleSee = () => {
+ 			pubCenter.dialogVisibleSee = true
+ 		}
+ 		// 编辑
+ 		// const edit = formValidation().data
+		// 获取详情
+ 		const handleEdit = (e) => {
+			console.log(e);
+			const loading = ElementPlus.ElLoading.service({
+				lock: true,
+				text: '获取详细数据中...',
+				background: 'rgba(0, 0, 0, 0.7)',
+			})
+			service.get(`/web/project/queryById/${e.id}`).then(res => {
+				console.log(res) 
+				loading.close()
+				if (res.data.code === 200) {
+					pubCenter.detailsData = res.data.data
+				} else {
+					if (res.data.code === 401) {
+						ElMessage(res.data.msg)
+						return
+					}
+					ElementPlus.ElMessage({
+						message: res.data.msg,
+						type: 'error',
+						duration: 3000
+					})
+				}
+			}).catch(() => {
+				loading.close()
+			})
+ 			pubCenter.dialogVisibleEdit = true
+ 		}
+		 const handlePubEditSubmit = () => {
+			const loading = ElementPlus.ElLoading.service({
+				lock: true,
+				text: '正在修改...',
+				background: 'rgba(0, 0, 0, 0.7)',
+			})
+			service.post(`/web/project/updateProject`,pubCenter.detailsData).then(res => {
+				console.log(res) 
+				loading.close()
+				if (res.data.code === 200) {
+					ElementPlus.ElMessage({
+						message: '项目修改成功！',
+						type: 'success',
+						duration: 3000
+					})
+					pubCenter.dialogVisibleEdit = false
+				} else {
+					if (res.data.code === 401) {
+						ElMessage(res.data.msg)
+						return
+					}
+					ElementPlus.ElMessage({
+						message: res.data.msg,
+						type: 'error',
+						duration: 3000
+					})
+				}
+			}).catch(() => {
+				loading.close()
+			})
+		 }
+
+ 		// 删除
+ 		const handleDelete = () => {
+ 			ElementPlus.ElMessageBox.confirm(
+ 				'确定删除此项目?',
+ 				'删除提示', {
+ 					confirmButtonText: '确定',
+ 					cancelButtonText: '取消',
+ 					type: 'warning',
+ 				}
+ 			).then(() => {
+ 				ElementPlus.ElMessage({
+ 					type: 'success',
+ 					message: '删除成功！',
+ 				})
+ 			}).catch(() => {
+ 				ElementPlus.ElMessage({
+ 					type: 'info',
+ 					message: '您已取消删除~',
+ 				})
+ 			})
+ 		}
+ 		//  下线
+ 		const handleOffline = () => {
+ 			ElementPlus.ElMessageBox.confirm(
+ 				'确定要将苏宁易购项目下线?',
+ 				'项目下线提示', {
+ 					confirmButtonText: '确定',
+ 					cancelButtonText: '取消',
+ 					type: 'warning',
+ 				}
+ 			).then(() => {
+ 				ElementPlus.ElMessage({
+ 					type: 'success',
+ 					message: '苏宁易购已成功下线！',
+ 				})
+ 			}).catch(() => {
+ 				ElementPlus.ElMessage({
+ 					type: 'info',
+ 					message: '您已取消项目下线~',
+ 				})
+ 			})
+ 		}
+ 		// 单选数据
+ 		const radio = formValidation().radio
+
+
+ 		//  收藏中心
+ 		const collCenter = reactive({
  			tableData: [{
  					id: '0001',
  					releaseDate: '2016-05-03',
@@ -120,23 +399,11 @@
  					}
  				},
  			],
- 			dialogVisibleEdit: false,
- 			dialogVisibleSee: false
  		})
- 		// 查看
- 		const handleSee = () => {
- 			pubCenter.dialogVisibleSee = true
- 		}
- 		// 编辑
- 		const edit = formValidation().data
- 		const handleEdit = () => {
- 			pubCenter.dialogVisibleEdit = true
- 		}
- 		// 删除
- 		const handleDelete = () => {
+ 		const handleClickColl = () => {
  			ElementPlus.ElMessageBox.confirm(
- 				'确定删除此项目?',
- 				'删除提示', {
+ 				'确定取消对苏宁易购项目的收藏',
+ 				'取消收藏提示', {
  					confirmButtonText: '确定',
  					cancelButtonText: '取消',
  					type: 'warning',
@@ -144,128 +411,21 @@
  			).then(() => {
  				ElementPlus.ElMessage({
  					type: 'success',
- 					message: '删除成功！',
+ 					message: '苏宁易购已成功取消收藏！',
  				})
  			}).catch(() => {
  				ElementPlus.ElMessage({
  					type: 'info',
- 					message: '您已取消删除~',
+ 					message: '您放弃了取消收藏操作~',
  				})
  			})
  		}
- 		//  下线
- 		const handleOffline = () => {
- 			ElementPlus.ElMessageBox.confirm(
- 				'确定要将苏宁易购项目下线?',
- 				'项目下线提示', {
- 					confirmButtonText: '确定',
- 					cancelButtonText: '取消',
- 					type: 'warning',
- 				}
- 			).then(() => {
- 				ElementPlus.ElMessage({
- 					type: 'success',
- 					message: '苏宁易购已成功下线！',
- 				})
- 			}).catch(() => {
- 				ElementPlus.ElMessage({
- 					type: 'info',
- 					message: '您已取消项目下线~',
- 				})
- 			})
- 		}
- 		// 单选数据
- 		const radio = formValidation().radio
-
-
-		//  收藏中心
-		const collCenter = reactive({
-			tableData: [{
-				id: '0001',
-				releaseDate: '2016-05-03',
-				proName: '撒士大夫士大夫士大夫士大夫撒旦是',
-				proType: '数据采集',
-				proCategory: '图片',
-				proCycle: '12个月',
-				dataView: '有后台',
-				price: '1',
-				settMethod: '月结',
-				signContract: '不限',
-				open: {
-					name: 'aaa',
-					channelBusiness: 'bbb',
-					address: 'sadsada',
-					weChat: '222',
-					email: '222',
-					proRequirement: '111'
-				}
-			},
-			{
-				id: '0001',
-				releaseDate: '2016-05-03',
-				proName: '111',
-				proType: '数据采集',
-				proCategory: '图片',
-				proCycle: '12个月',
-				dataView: '有后台',
-				price: '1',
-				settMethod: '月结',
-				signContract: '不限',
-				open: {
-					name: 'aaa',
-					channelBusiness: 'bbb',
-					address: 'sadsada',
-					weChat: '222',
-					email: '222',
-					proRequirement: '111'
-				}
-			},
-			{
-				id: '0001',
-				releaseDate: '2016-05-03',
-				proName: '111',
-				proType: '数据采集',
-				proCategory: '图片',
-				proCycle: '12个月',
-				dataView: '有后台',
-				price: '1',
-				settMethod: '月结',
-				signContract: '不限',
-				open: {
-					name: 'aaa',
-					channelBusiness: 'bbb',
-					address: 'sadsada',
-					weChat: '222',
-					email: '222',
-					proRequirement: '111'
-				}
-			},
-			],
-		})
-		const handleClickColl = () => {
-			ElementPlus.ElMessageBox.confirm(
-				'确定取消对苏宁易购项目的收藏',
-				'取消收藏提示', {
-					confirmButtonText: '确定',
-					cancelButtonText: '取消',
-					type: 'warning',
-				}
-			).then(() => {
-				ElementPlus.ElMessage({
-					type: 'success',
-					message: '苏宁易购已成功取消收藏！',
-				})
-			}).catch(() => {
-				ElementPlus.ElMessage({
-					type: 'info',
-					message: '您放弃了取消收藏操作~',
-				})
-			})
-		}
  		return {
-			// 当前时间
-			date,
+ 			// 当前时间
+ 			date,
+ 			// 头像
  			avatar,
+ 			handleEditAvatar,
  			popoverRef,
  			avatarActive,
  			handleAvatarSelect,
@@ -275,23 +435,22 @@
  			...toRefs(userCenter()),
  			// 发布中心
  			pubCenter,
- 			edit,
+ 			// edit,
  			handleSee,
  			handleEdit,
+			handlePubEditSubmit,
+			getPubList,
  			handleDelete,
  			handleOffline,
  			handleClick,
-			//  收藏中心
-			collCenter,
-			handleClickColl
+ 			//  收藏中心
+ 			collCenter,
+ 			handleClickColl
  		}
  	}
  }
-
-
  // 用户中心
  const userCenter = () => {
- 	// 用户中心
  	const validateName = (rule, value, callback) => {
  		if (value === '') {
  			callback(new Error('请输入姓名'))
@@ -299,73 +458,92 @@
  			callback()
  		}
  	}
- 	// const validatePhone = (rule, value, callback) => {
- 	// 	let reg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/
- 	// 	if (value === '') {
- 	// 		callback(new Error('请输入手机号'));
- 	// 	} else if (!reg.test(value)) {
- 	// 		callback(new Error('请输入正确的手机号'))
- 	// 	} else {
- 	// 		callback()
- 	// 	}
- 	// }
-	// const validateEmail = (rule, value, callback) => {
-	// 	let reg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
-	// 	if (value === '') {
-	// 		callback(new Error('请输入您的电子邮箱'))
-	// 	} else if (!reg.test(value)) {
-	// 		callback(new Error('请输入正确的电子邮箱'))
-	// 	} else {
-	// 		callback()
-	// 	}
-	// }
- 	// const validateCompany = (rule, value, callback) => {
- 	// 	if (value === '') {
- 	// 		callback(new Error('请输入您的公司'))
- 	// 	} else {
- 	// 		callback()
- 	// 	}
- 	// }
- 	const validatePass = (rule, value, callback) => {
- 		if (value === '') {
- 			callback(new Error('请输入密码'))
+ 	const validateconPass = (rule, value, callback) => {
+ 		if (userCenter.ruleForm.password && value !== userCenter.ruleForm.password) {
+ 			callback(new Error('两次密码输入不一致'))
  		} else {
  			callback()
  		}
  	}
+ 	let user = sessionStorage.getItem('userInfo') ? JSON.parse(sessionStorage.getItem('userInfo')).user : {}
+ 	const userRuleFormRef = ref(null)
  	const userCenter = reactive({
  		ruleForm: {
- 			name: '',
- 			phone: '',
-			email: '',
- 			company: '',
+ 			name: user.name,
+ 			phone: user.phone,
+ 			email: user.email,
+ 			company: user.companyName,
  			password: '',
+ 			conPassword: ''
  		},
  		rules: {
  			name: [{
  				validator: validateName,
  				trigger: 'blur'
  			}],
- 			// phone: [{
- 			// 	validator: validatePhone,
- 			// 	trigger: 'blur'
- 			// }],
-			// email: [{
-			// 	validator: validateEmail,
-			// 	trigger: 'blur'
-			// }],
- 			// company: [{
- 			// 	validator: validateCompany,
- 			// 	trigger: 'blur'
- 			// }],
- 			password: [{
- 				validator: validatePass,
+ 			conPassword: [{
+ 				validator: validateconPass,
  				trigger: 'blur'
  			}],
  		},
  	})
+ 	const userSubmitForm = (fromValue) => {
+ 		console.log(fromValue);
+ 		fromValue.validate((valid) => {
+ 			console.log(valid);
+ 			if (valid) {
+ 				const loading = ElementPlus.ElLoading.service({
+ 					lock: true,
+ 					text: '用户信息修改...',
+ 					background: 'rgba(0, 0, 0, 0.7)',
+ 				})
+ 				let data = {
+ 					name: fromValue.model.name,
+ 					phone: fromValue.model.phone,
+ 					email: fromValue.model.email,
+ 					password: fromValue.model.password || null,
+ 					companyName: fromValue.model.company
+ 				}
+ 				service.post('/web/user/editUser', data).then(res => {
+ 					console.log(res)
+ 					loading.close()
+ 					if (res.data.code === 200) {
+ 						if (fromValue.model.password) {
+ 							ElMessage('用户信息修改成功！', 'success')
+ 							return
+ 						}
+ 						let data = {
+ 							token: JSON.parse(sessionStorage.getItem('userInfo')).token,
+ 							user: res.data.data
+ 						}
+ 						sessionStorage.setItem('userInfo', JSON.stringify(data));
+ 						ElementPlus.ElMessage({
+ 							message: '用户信息修改成功！',
+ 							type: 'success',
+ 							duration: 3000
+ 						})
+
+ 					} else {
+ 						if (res.data.code === 401) {
+ 							ElMessage(res.data.msg)
+ 							return
+ 						}
+ 						ElementPlus.ElMessage({
+ 							message: res.data.msg,
+ 							type: 'error',
+ 							duration: 3000
+ 						})
+ 					}
+ 				}).catch(() => {
+ 					loading.close()
+ 				})
+ 			}
+ 		})
+ 	}
  	return {
- 		userCenter
+ 		userRuleFormRef,
+ 		userCenter,
+ 		userSubmitForm
  	}
  }
  // 创建vue3的实例

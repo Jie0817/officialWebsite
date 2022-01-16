@@ -17,15 +17,26 @@ const composition = {
 	},
 	setup() {
 		onMounted(() => {
-			getListData(1);
+			getListData();
 		})
-		const getListData = (num) => {
+
+		// 查询
+		const handleQuery = () => {
+			getListData();
+		}
+		const getListData = (num = 1) => {
 			data.loading = true
 			const d = {
 				pageNum : num,
-				pageSize : 5
+				pageSize : 9,
+				projectTypes : data.selectValue[0], //项目类型
+				// prices : data.selectValue[4], //单价参数
+				projectKinds : data.selectValue[1], // 项目种类
+				dataViews : data.selectValue[2], //数据查看
+				clearingForms : data.selectValue[3], // 结算方式
+				projectName : data.search
 			}
-			service.post('/api/web/project/list',d).then(res => {
+			service.post('/web/project/list',d).then(res => {
 				console.log(res)
 				data.loading = false
 				if(res.data.code === 200){
@@ -63,23 +74,23 @@ const composition = {
 					placeholder : '项目类型',
 					data : [
 						{
-							value: 'Option1',
+							value: '不限',
 							label: '不限',
 						},
 						{
-							value: 'Option2',
+							value: '数据采集',
 							label: '数据采集',
 						},
 						{
-							value: 'Option3',
+							value: '语音转写',
 							label: '语音转写',
 						},
 						{
-							value: 'Option4',
+							value: '描点标注',
 							label: '描点标注',
 						},
 						{
-							value: 'Option5',
+							value: '道路标注',
 							label: '道路标注',
 						},
 					]
@@ -88,23 +99,23 @@ const composition = {
 					placeholder : '项目种类',
 					data : [
 						{
-							value: 'Option1',
+							value: '不限',
 							label: '不限',
 						},
 						{
-							value: 'Option2',
+							value: '语音',
 							label: '语音',
 						},
 						{
-							value: 'Option3',
+							value: '图片',
 							label: '图片',
 						},
 						{
-							value: 'Option4',
+							value: '文本',
 							label: '文本',
 						},
 						{
-							value: 'Option5',
+							value: '视频',
 							label: '视频',
 						},
 					]
@@ -113,45 +124,20 @@ const composition = {
 					placeholder : '数据查看',
 					data : [
 						{
-							value: 'Option1',
+							value: '不限',
 							label: '不限',
 						},
 						{
-							value: 'Option2',
+							value: '有后台',
 							label: '有后台',
 						},
 						{
-							value: 'Option3',
+							value: '无后台',
 							label: '无后台',
 						},
 						{
-							value: 'Option4',
+							value: '打包',
 							label: '打包',
-						},
-					]
-				},
-				{
-					placeholder : '单价参数',
-					data : [
-						{
-							value: 'Option1',
-							label: '不限',
-						},
-						{
-							value: 'Option2',
-							label: '按小时',
-						},
-						{
-							value: 'Option3',
-							label: '按张',
-						},
-						{
-							value: 'Option4',
-							label: '按框',
-						},
-						{
-							value: 'Option5',
-							label: '整包',
 						},
 					]
 				},
@@ -159,97 +145,55 @@ const composition = {
 					placeholder : '结算方式',
 					data : [
 						{
-							value: 'Option1',
+							value: '不限',
 							label: '不限',
 						},
 						{
-							value: 'Option2',
+							value: '日结',
 							label: '日结',
 						},
 						{
-							value: 'Option3',
+							value: '周结',
 							label: '周结',
 						},
 						{
-							value: 'Option4',
+							value: '月结',
 							label: '月结',
 						},
 						{
-							value: 'Option5',
+							value: '完结',
 							label: '完结',
 						},
 					]
-				}
+				},
+				// {
+				// 	placeholder : '单价参数',
+				// 	data : [
+				// 		{
+				// 			value: '不限',
+				// 			label: '不限',
+				// 		},
+				// 		{
+				// 			value: '按小时',
+				// 			label: '按小时',
+				// 		},
+				// 		{
+				// 			value: '按张',
+				// 			label: '按张',
+				// 		},
+				// 		{
+				// 			value: '按框',
+				// 			label: '按框',
+				// 		},
+				// 		{
+				// 			value: '整包',
+				// 			label: '整包',
+				// 		},
+				// 	]
+				// },
 			],
-			selectValue : {
-				selectValue0 : '',
-				selectValue1 : '',
-				selectValue2 : '',
-				selectValue3 : '',
-				selectValue4 : '',
-			},
-			tableData : [
-				// {
-				// 	id : '0001',
-				// 	releaseDate: '2016-05-03',
-				// 	proName: '撒士大夫士大夫士大夫士大夫撒旦是',
-				// 	proType : '数据采集',
-				// 	proCategory : '图片',
-				// 	proCycle : '12个月',
-				// 	dataView : '有后台',
-				// 	price : '1',
-				// 	settMethod : '月结',
-				// 	signContract : '不限',
-				// 	open : {
-				// 		name : 'aaa',
-				// 		channelBusiness : 'bbb',
-				// 		address : 'sadsada',
-				// 		weChat : '222',
-				// 		email : '222',
-				// 		proRequirement : '111'
-				// 	}
-				// },
-				// {
-				// 	id : '0001',
-				// 	releaseDate: '2016-05-03',
-				// 	proName: '111',
-				// 	proType : '数据采集',
-				// 	proCategory : '图片',
-				// 	proCycle : '12个月',
-				// 	dataView : '有后台',
-				// 	price : '1',
-				// 	settMethod : '月结',
-				// 	signContract : '不限',
-				// 	open : {
-				// 		name : 'aaa',
-				// 		channelBusiness : 'bbb',
-				// 		address : 'sadsada',
-				// 		weChat : '222',
-				// 		email : '222',
-				// 		proRequirement : '111'
-				// 	}
-				// },
-				// {
-				// 	id : '0001',
-				// 	releaseDate: '2016-05-03',
-				// 	proName: '111',
-				// 	proType : '数据采集',
-				// 	proCategory : '图片',
-				// 	proCycle : '12个月',
-				// 	dataView : '有后台',
-				// 	price : '1',
-				// 	settMethod : '月结',
-				// 	signContract : '不限',
-				// 	open : {
-				// 		name : 'aaa',
-				// 		channelBusiness : 'bbb',
-				// 		address : 'sadsada',
-				// 		weChat : '222',
-				// 		email : '222',
-				// 		proRequirement : '111'
-				// 	}
-				// },
-			]
+			selectValue : [],
+			tableData : []
 
 		})
 		const handleCommand = (command) => {
@@ -258,6 +202,7 @@ const composition = {
 		}
 		return {
 			...toRefs(data),
+			handleQuery,
 			handleCommand,
 			onCurrentChange
 		}

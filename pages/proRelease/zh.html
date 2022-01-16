@@ -14,6 +14,7 @@
 	<script src="./../../utils/vue.min.js"></script>
 	<!-- 导入组件库 -->
 	<script src="./../../utils/element-plus/element-plus.min.js"></script>
+	<script src="./../../utils/axios.min.js"></script>
 </head>
 
 <body>
@@ -27,7 +28,7 @@
 				<div class="container">
 					<div class="content">
 						<div class="avatar">
-							<img src="./../../assets/img/Avatar/1.jpg" alt="">
+							<img :src="'./../../assets/img/Avatar/'+user?.imgUrl" alt="">
 							<p>项目发布</p>
 						</div>
 
@@ -94,6 +95,11 @@
 								</template>
 								<el-input v-model="ruleForm.price"></el-input>
 							</el-form-item>
+							<!-- <el-form-item prop="priceCondition">
+								<el-radio-group v-model="ruleForm.priceCondition">
+									<el-radio v-for="item in radio.priceCondition" :label="item.value">{{item.text}}</el-radio>
+								</el-radio-group>
+							</el-form-item> -->
 							<el-form-item prop="settMethod">
 								<template #label>
 									09<span class="label">结算方式</span>

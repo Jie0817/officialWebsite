@@ -5,6 +5,7 @@
  import {
  	qrcode
  } from './../../components/qrcode.js'
+ import service from './../../utils/request.js'
  const {
  	ref,
  	reactive,
@@ -45,7 +46,7 @@
  						phone: fromValue.model.phone,
  						password: fromValue.model.password
  					}
- 					axios.post('/api/web/user/login', data).then(res => {
+ 					service.post('/web/user/login', data).then(res => {
  						console.log(res)
  						loading.close()
  						if (res.data.code === 200) {
