@@ -1,4 +1,5 @@
  // 定义 vue3 的对象
+ import { header } from './../../components/head.js'
  import {
  	footer
  } from './../../components/footer.js'
@@ -13,6 +14,7 @@
  } = Vue
  const composition = {
  	components: {
+		myheader : header,
  		myfooter: footer,
  		qrcode
  	},
@@ -54,7 +56,7 @@
  							ElementPlus.ElMessage({
  								message: '登录成功！',
  								type: 'success',
- 								duration: 2000,
+ 								duration: 1000,
  								onClose() {
  									location.href = './../home/zh.html'
  								}

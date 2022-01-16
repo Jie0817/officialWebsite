@@ -1,12 +1,12 @@
 export const footer = {
 	template : `
 		<div 
-		style="background:#e6e6e6;
+		style="background:#fff;
 		text-align: center;
 		padding: 18px;
 		color:#999;
 		font-size:14px;
-		height:100%;
+		height:42px;
 		display: flex;
 	justify-content: center;
 	align-items: center;

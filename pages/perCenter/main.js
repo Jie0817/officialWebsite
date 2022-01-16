@@ -47,8 +47,21 @@
 				getPubList();
 			 }
  		}
-
- 		const activeName = ref('0')
+		
+		const getParameter = () => {
+			var url = location.search; //获取url中"?"符后的字串
+			var objParameter = new Object();  
+			if ( url.indexOf( "?" ) != -1 ) {  
+			var str = decodeURI(url).substr( 1 );
+			var strs = str.split( "&" );  
+			for ( var i = 0; i < strs.length; i++ ) {  
+				objParameter[ strs[ i ].split( "=" )[ 0 ] ] = ( strs[ i ].split( "=" )[ 1 ] );  
+			}    
+			}
+			return objParameter
+		}
+		console.log(getParameter())
+ 		const activeName = ref(getParameter().active ? getParameter().active : '0')
 
  		//  头像
  		const avatar = [
@@ -199,7 +212,7 @@
 			pubCenter.loading = true
 			let data = {
 				pageNum : num,
-				pageSize : 1
+				pageSize : 9
 			}
 			service.post('/web/project/listByUser', data).then(res => {
 				console.log(res)
@@ -222,6 +235,10 @@
 			}).catch(() => {
 				pubCenter.loading = false
 			})
+		}
+		// 如果从发布页跳转过来就加载数据
+		if(getParameter().active){
+			getPubList();
 		}
  		// 查看
  		const handleSee = () => {
@@ -258,6 +275,7 @@
 			})
  			pubCenter.dialogVisibleEdit = true
  		}
+		//  修改
 		 const handlePubEditSubmit = () => {
 			const loading = ElementPlus.ElLoading.service({
 				lock: true,
@@ -273,6 +291,7 @@
 						type: 'success',
 						duration: 3000
 					})
+					getPubList();
 					pubCenter.dialogVisibleEdit = false
 				} else {
 					if (res.data.code === 401) {
@@ -291,19 +310,16 @@
 		 }
 
  		// 删除
- 		const handleDelete = () => {
+ 		const handleDelete = (e) => {
  			ElementPlus.ElMessageBox.confirm(
- 				'确定删除此项目?',
+ 				`确定删除《${e.projectName}》项目?`,
  				'删除提示', {
  					confirmButtonText: '确定',
  					cancelButtonText: '取消',
  					type: 'warning',
  				}
  			).then(() => {
- 				ElementPlus.ElMessage({
- 					type: 'success',
- 					message: '删除成功！',
- 				})
+				pubDelete(e);
  			}).catch(() => {
  				ElementPlus.ElMessage({
  					type: 'info',
@@ -311,20 +327,48 @@
  				})
  			})
  		}
- 		//  下线
- 		const handleOffline = () => {
+		const pubDelete = (e) => {
+			const loading = ElementPlus.ElLoading.service({
+				lock: true,
+				text: '正在删除...',
+				background: 'rgba(0, 0, 0, 0.7)',
+			})
+			service.get(`/web/project/delete/${e.id}`).then(res => {
+				console.log(res) 
+				loading.close()
+				if (res.data.code === 200) {
+					getPubList();
+					ElementPlus.ElMessage({
+						type: 'success',
+						message: '删除成功！',
+					})
+					
+				} else {
+					if (res.data.code === 401) {
+						ElMessage(res.data.msg)
+						return
+					}
+					ElementPlus.ElMessage({
+						message: res.data.msg,
+						type: 'error',
+						duration: 3000
+					})
+				}
+			}).catch(() => {
+				loading.close()
+			})
+		}
+ 		//  下线 or 上线
+ 		const handleOffline = (e) => {
  			ElementPlus.ElMessageBox.confirm(
- 				'确定要将苏宁易购项目下线?',
- 				'项目下线提示', {
+ 				`确定要将《${e.projectName}》项目${e.status == 1 ? '下线' : '上线'}?`,
+ 				`项目${e.status ? '下线' : '上线'}提示`, {
  					confirmButtonText: '确定',
  					cancelButtonText: '取消',
  					type: 'warning',
  				}
  			).then(() => {
- 				ElementPlus.ElMessage({
- 					type: 'success',
- 					message: '苏宁易购已成功下线！',
- 				})
+				pubOffline(e)
  			}).catch(() => {
  				ElementPlus.ElMessage({
  					type: 'info',
@@ -332,6 +376,40 @@
  				})
  			})
  		}
+		 const pubOffline = (e) => {
+			const loading = ElementPlus.ElLoading.service({
+				lock: true,
+				text: `正在进行《${e.projectName}》项目的${e.status == 1 ? '下线' : '上线'}...`,
+				background: 'rgba(0, 0, 0, 0.7)',
+			})
+			let data = {
+				id : e.id,
+				status : e.status == 1 ? 2 : 1
+			}
+			service.post(`/web/project/updateStatus`,data).then(res => {
+				console.log(res) 
+				loading.close()
+				if (res.data.code === 200) {
+					getPubList();
+					ElementPlus.ElMessage({
+						type: 'success',
+						message: `《${e.projectName}》项目已成功${e.status == 1 ? '下线' : '上线'}！'`,
+					})
+				} else {
+					if (res.data.code === 401) {
+						ElMessage(res.data.msg)
+						return
+					}
+					ElementPlus.ElMessage({
+						message: res.data.msg,
+						type: 'error',
+						duration: 3000
+					})
+				}
+			}).catch(() => {
+				loading.close()
+			})
+		 }
  		// 单选数据
  		const radio = formValidation().radio
 

@@ -91,9 +91,9 @@
 								<el-table-column width="200" fixed="right" label="操作" prop="signContract">
 									<template #default="props">
 										<!-- <el-button type="text" size="small" @click="handleSee">查看</el-button> -->
-										<el-button @click="handleOffline" type="text" size="small">下线</el-button>
+										<el-button @click="handleOffline(props.row)" type="text" size="small">{{props.row.status==1 ? '下线' : '上线'}}</el-button>
 										<el-button @click="handleEdit(props.row)" type="text" size="small">编辑</el-button>
-										<el-button @click="handleDelete" type="text" size="small">删除</el-button>
+										<el-button @click="handleDelete(props.row)" type="text" size="small">删除</el-button>
 									</template>
 								</el-table-column>
 							</el-table>
@@ -129,13 +129,13 @@
 					</el-tabs>
 				</div>
 			</el-main>
-			<el-footer>
+			<el-footer height="42px">
 				<myfooter></myfooter>
 			</el-footer>
 		</el-container>
 		<qrcode></qrcode>
 		<!-- 头像修改 -->
-		<el-popover :virtual-ref="popoverRef" :width="600" trigger="hover" :show-after="500" placement="bottom"
+		<el-popover :virtual-ref="popoverRef" :width="600" trigger="hover" :show-after="200" placement="bottom"
 			virtual-triggering
 			popper-style="box-shadow: rgb(14 18 22 / 35%) 0px 10px 38px -10px, rgb(14 18 22 / 20%) 0px 10px 20px -15px; padding: 20px;">
 			<template #default>

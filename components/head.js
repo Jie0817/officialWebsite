@@ -23,13 +23,29 @@ export const header = {
 							</el-dropdown-menu>
 						</template>
 					</el-dropdown>
-					<el-button v-else color="#8461BB" onclick="location.href='./../login/zh.html'" plain>登录</el-button>
+					<div v-else>
+						<div style="display: flex;align-items: center;" v-if="isLogin || isRegister">
+							<el-button color="#8461BB" onclick="location.href='./../login/zh.html'" :plain="isRegister" :style="{color: isLogin ? 'white' : ''}">登录</el-button>
+							<el-button color="#8461BB" onclick="location.href='./../register/zh.html'" :plain="isLogin"  :style="{color: isRegister ? 'white' : ''}">注册</el-button>
+						</div>
+						<el-button v-else color="#8461BB" onclick="location.href='./../login/zh.html'" plain>登录</el-button>
+					</div>
 				</div>
 			</div>
 		</el-affix>
 	`,
 	setup(){
 		const user = ref(sessionStorage.getItem('userInfo') ? JSON.parse(sessionStorage.getItem('userInfo')).user : null)
+		const isLogin = ref(false)
+		const isRegister = ref(false)
+		console.log(location.href)
+		console.log(location.href.indexOf('pages/register/zh.html'))
+		if(location.href.indexOf('pages/register/zh.html') > -1 ){
+			isRegister.value = true
+		}
+		if(location.href.indexOf('pages/login/zh.html') > -1 ){
+			isLogin.value = true
+		}
 		const handleCommand = (e) => {
 			if(e == 0){
 				location.href = './../home/zh.html'
@@ -51,6 +67,8 @@ export const header = {
 		}
 		return {
 			user,
+			isLogin,
+			isRegister,
 			handleCommand
 		}
 	}
