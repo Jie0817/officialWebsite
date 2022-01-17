@@ -6,7 +6,7 @@ export const header = {
 		<el-affix style="height:60px;">
 			<div style="width : 100%;height:60px;background:#fff;display : flex;justify-content: center;padding : 4px 0; border-bottom : 1px solid #e6e6e6">
 				<div style="width : 1200px;display: flex;align-items: center;justify-content: space-between;">
-					<div style="width : 42px"><img style="width : 100%" src="./../../assets/img/logo.png"></div>
+					<div style="width : 80px"><img style="width : 100%" src="./../../assets/img/logo.png"></div>
 					<el-dropdown @command="handleCommand" v-if="user">
 						<span class="el-dropdown-link" style="display : flex;align-items: center;">
 							{{user.name}}

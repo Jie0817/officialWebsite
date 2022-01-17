@@ -1,7 +1,7 @@
 export const footer = {
 	template : `
 		<div 
-		style="background:#fff;
+		style="background:#FBFAFF;
 		text-align: center;
 		padding: 18px;
 		color:#999;

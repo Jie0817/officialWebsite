@@ -27,6 +27,10 @@
  		qrcode
  	},
  	setup() {
+
+
+		// 用户信息
+		const userInfo = sessionStorage.getItem('userInfo') ? JSON.parse(sessionStorage.getItem('userInfo')).user : {}
  		const date = ref('上午好！')
 
  		// 获取当前时间
@@ -45,6 +49,9 @@
  			console.log(tab, event)
 			 if(tab.props.name === '1'){
 				getPubList();
+			 }
+			 if(tab.props.name === '2'){
+				getCollList();
 			 }
  		}
 		
@@ -212,7 +219,7 @@
 			pubCenter.loading = true
 			let data = {
 				pageNum : num,
-				pageSize : 9
+				pageSize : 10
 			}
 			service.post('/web/project/listByUser', data).then(res => {
 				console.log(res)
@@ -416,81 +423,61 @@
 
  		//  收藏中心
  		const collCenter = reactive({
- 			tableData: [{
- 					id: '0001',
- 					releaseDate: '2016-05-03',
- 					proName: '撒士大夫士大夫士大夫士大夫撒旦是',
- 					proType: '数据采集',
- 					proCategory: '图片',
- 					proCycle: '12个月',
- 					dataView: '有后台',
- 					price: '1',
- 					settMethod: '月结',
- 					signContract: '不限',
- 					open: {
- 						name: 'aaa',
- 						channelBusiness: 'bbb',
- 						address: 'sadsada',
- 						weChat: '222',
- 						email: '222',
- 						proRequirement: '111'
- 					}
- 				},
- 				{
- 					id: '0001',
- 					releaseDate: '2016-05-03',
- 					proName: '111',
- 					proType: '数据采集',
- 					proCategory: '图片',
- 					proCycle: '12个月',
- 					dataView: '有后台',
- 					price: '1',
- 					settMethod: '月结',
- 					signContract: '不限',
- 					open: {
- 						name: 'aaa',
- 						channelBusiness: 'bbb',
- 						address: 'sadsada',
- 						weChat: '222',
- 						email: '222',
- 						proRequirement: '111'
- 					}
- 				},
- 				{
- 					id: '0001',
- 					releaseDate: '2016-05-03',
- 					proName: '111',
- 					proType: '数据采集',
- 					proCategory: '图片',
- 					proCycle: '12个月',
- 					dataView: '有后台',
- 					price: '1',
- 					settMethod: '月结',
- 					signContract: '不限',
- 					open: {
- 						name: 'aaa',
- 						channelBusiness: 'bbb',
- 						address: 'sadsada',
- 						weChat: '222',
- 						email: '222',
- 						proRequirement: '111'
- 					}
- 				},
- 			],
+ 			tableData: [],
+			loading : false,
+			pagination : {
+				total : 0,
+				size : 5
+			}
  		})
- 		const handleClickColl = () => {
+		 // 获取收藏列表
+		const getCollList = (num = 1) => {
+			console.log(num);
+			collCenter.loading = true
+			let data = {
+				pageNum : num,
+				pageSize : 10
+			}
+			service.post('/web/collect/list', data).then(res => {
+				console.log(res)
+				collCenter.loading = false
+				if (res.data.code === 200) {
+					collCenter.tableData = res.data.data.records.map(item => {
+						item.flag = 1
+						return item
+					})
+					collCenter.pagination.total = res.data.data.total
+					collCenter.pagination.size = res.data.data.size
+				} else {
+					if (res.data.code === 401) {
+						ElMessage(res.data.msg)
+						return
+					}
+					ElementPlus.ElMessage({
+						message: res.data.msg,
+						type: 'error',
+						duration: 3000
+					})
+				}
+			}).catch(() => {
+				collCenter.loading = false
+			})
+		}
+ 		const handleClickColl = (e,type) => {
+			 console.log(e);
+			if(type == 2){
+				collAdd(e)
+				return
+			}
  			ElementPlus.ElMessageBox.confirm(
- 				'确定取消对苏宁易购项目的收藏',
+ 				`确定取消对《${e.projectName}》项目的收藏`,
  				'取消收藏提示', {
  					confirmButtonText: '确定',
  					cancelButtonText: '取消',
  					type: 'warning',
  				}
  			).then(() => {
- 				ElementPlus.ElMessage({
- 					type: 'success',
- 					message: '苏宁易购已成功取消收藏！',
- 				})
+				 collCancel(e);
  			}).catch(() => {
  				ElementPlus.ElMessage({
  					type: 'info',
@@ -498,7 +485,82 @@
  				})
  			})
  		}
+		const collCancel = (e) => {
+			const loading = ElementPlus.ElLoading.service({
+				lock: true,
+				text: '取消收藏中...',
+				background: 'rgba(0, 0, 0, 0.7)',
+			})
+			service.get(`/web/collect/deleteCollect/${e.id}`).then(res => {
+				console.log(res) 
+				loading.close()
+				if (res.data.code === 200) {
+					e.flag = 2
+					ElementPlus.ElMessage({
+						type: 'success',
+						message: '取消收藏成功！',
+					})
+					
+				} else {
+					if (res.data.code === 401) {
+						ElMessage(res.data.msg)
+						return
+					}
+					ElementPlus.ElMessage({
+						message: res.data.msg,
+						type: 'error',
+						duration: 3000
+					})
+				}
+			}).catch(() => {
+				loading.close()
+			})
+			// ElementPlus.ElMessage({
+			// 	type: 'success',
+			// 	message: `已成功取消《${e.projectName}》项目的收藏`,
+			// })
+		}
+		const collAdd = (e) => {
+			const loading = ElementPlus.ElLoading.service({
+				lock: true,
+				text: '收藏中...',
+				background: 'rgba(0, 0, 0, 0.7)',
+			})
+			service.get(`/web/collect/saveCollect/${e.id}`).then(res => {
+				console.log(res) 
+				loading.close()
+				if (res.data.code === 200) {
+					// getCollList();
+					collCenter.tableData.forEach((item,index) => {
+						if(item.id == e.id){
+							item.flag = 1
+							collCenter.tableData.splice(index,1,item)
+						}
+					})
+					// e.flag = 1
+					ElementPlus.ElMessage({
+						type: 'success',
+						message: '收藏成功！',
+					})
+					
+				} else {
+					if (res.data.code === 401) {
+						ElMessage(res.data.msg)
+						return
+					}
+					ElementPlus.ElMessage({
+						message: res.data.msg,
+						type: 'error',
+						duration: 3000
+					})
+				}
+			}).catch(() => {
+				loading.close()
+			})
+		}
  		return {
+			// 用户信息
+			userInfo,
  			// 当前时间
  			date,
  			// 头像
@@ -523,6 +585,7 @@
  			handleClick,
  			//  收藏中心
  			collCenter,
+			getCollList,
  			handleClickColl
  		}
  	}

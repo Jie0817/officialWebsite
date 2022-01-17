@@ -24,11 +24,17 @@ const composition = {
 		const handleQuery = () => {
 			getListData();
 		}
+		const handleQueryVisibleChange = (e) => {
+			if(!e){
+				getListData();
+			}
+			console.log(e);
+		}
 		const getListData = (num = 1) => {
 			data.loading = true
 			const d = {
 				pageNum : num,
-				pageSize : 9,
+				pageSize : 10,
 				projectTypes : data.selectValue[0], //项目类型
 				// prices : data.selectValue[4], //单价参数
 				projectKinds : data.selectValue[1], // 项目种类
@@ -200,11 +206,47 @@ const composition = {
 			console.log(command);
 			data.adr = command
 		}
+
+
+		// 收藏
+		const handleClickColl = (e) => {
+			const loading = ElementPlus.ElLoading.service({
+				lock: true,
+				text: '收藏中...',
+				background: 'rgba(0, 0, 0, 0.7)',
+			})
+			service.get(`/web/collect/saveCollect/${e.id}`).then(res => {
+				console.log(res) 
+				loading.close()
+				if (res.data.code === 200) {
+					// getCollList();
+					ElementPlus.ElMessage({
+						type: 'success',
+						message: '收藏成功！',
+					})
+					
+				} else {
+					if (res.data.code === 401) {
+						ElMessage(res.data.msg)
+						return
+					}
+					ElementPlus.ElMessage({
+						message: res.data.msg,
+						type: 'error',
+						duration: 3000
+					})
+				}
+			}).catch(() => {
+				loading.close()
+			})
+		}
 		return {
+			handleQueryVisibleChange,
 			...toRefs(data),
 			handleQuery,
 			handleCommand,
-			onCurrentChange
+			onCurrentChange,
+			handleClickColl
 		}
 	}
 }
