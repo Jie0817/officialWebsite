@@ -45,20 +45,12 @@
 		// myChart.hideLoading();
 		echarts.registerMap('world', world);
 		const option = {
-			title: {
-				text: 'USA Population Estimates (2012)',
-				subtext: 'Data from www.census.gov',
-				sublink: 'http://www.census.gov/popest/data/datasets.html',
-				left: 'right'
-			},
 			tooltip: {
 				trigger: 'item',
 				showDelay: 0,
 				transitionDuration: .5,
 				formatter: function (params) {
-					console.log(params);
 					let data = params.data || {}
-					console.log(data.text);
 					let textArr = []
 					data.text?.forEach(item => {
 						const value = (item.value + '').split('.');
@@ -66,10 +58,8 @@
 							/(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
 							'$1,'
 						);
-						console.log(item);
 						textArr.push(`${item.title}<span class="active">${valueStr}</span>H<br/>`)
 					})
-					console.log(textArr);
 					return params.name + '<br/>' + textArr.join('');
 					// return params.seriesName + '<br/>' + params.name + ': ' + valueStr;
 				}
@@ -244,7 +234,7 @@
 						}
 					},
 					{
-						name : 'poland',
+						name : 'Poland',
 						text : [
 							{
 								title : 'Polish',
@@ -278,7 +268,223 @@
 						itemStyle : {
 								color: '#9981FF'
 						}
-					}
+					},
+					{
+						name : 'Turkey',
+						text : [
+							{
+								title : 'Turkish',
+								value : 100
+							}
+						],
+						itemStyle : {
+								color: '#DFA5FB'
+						}
+					},
+					{
+						name : 'Hungary',
+						text : [
+							{
+								title : 'Hungarian',
+								value : 100
+							}
+						],
+						itemStyle : {
+								color: '#CE77F9'
+						}
+					},
+					{
+						name : 'Georgia',
+						text : [
+							{
+								title : 'Georgian',
+								value : 100
+							}
+						],
+						itemStyle : {
+								color: '#A752FD'
+						}
+					},
+					{
+						name : 'Israel',
+						text : [
+							{
+								title : 'Hebrew',
+								value : 100
+							}
+						],
+						itemStyle : {
+								color: '#ECC1FF'
+						}
+					},
+					{
+						name : 'Bangladesh',
+						text : [
+							{
+								title : 'Bengali',
+								value : 100
+							}
+						],
+						itemStyle : {
+								color: '#DFA5FB'
+						}
+					},
+					{
+						name : 'Nepal',
+						text : [
+							{
+								title : 'Nepali',
+								value : 100
+							}
+						],
+						itemStyle : {
+								color: '#F3DFFD'
+						}
+					},
+					{
+						name : 'Myanmar',
+						text : [
+							{
+								title : 'Burmese',
+								value : 100
+							}
+						],
+						itemStyle : {
+								color: '#BF48FB'
+						}
+					},
+					{
+						name : 'Malaysia',
+						text : [
+							{
+								title : 'Malaysian',
+								value : 100
+							}
+						],
+						itemStyle : {
+								color: '#DD8BC0'
+						}
+					},
+					{
+						name : 'Czech Rep.',
+						text : [
+							{
+								title : 'Czech',
+								value : 100
+							}
+						],
+						itemStyle : {
+								color: '#BCAADA'
+						}
+					},
+					{
+						name : 'Romania',
+						text : [
+							{
+								title : 'Romanesian',
+								value : 100
+							}
+						],
+						itemStyle : {
+								color: '#945BAE'
+						}
+					},
+					{
+						name : 'Kenya',
+						text : [
+							{
+								title : 'Swahili',
+								value : 100
+							}
+						],
+						itemStyle : {
+								color: '#CE77F9'
+						}
+					},
+					{
+						name : 'Korea',
+						text : [
+							{
+								title : 'Korean',
+								value : 200
+							}
+						],
+						itemStyle : {
+								color: '#AC8EFF'
+						}
+					},
+					{
+						name : 'Japan',
+						text : [
+							{
+								title : 'Japanese',
+								value : 300
+							}
+						],
+						itemStyle : {
+								color: '#F3DFFD'
+						}
+					},
+					{
+						name : 'Russia',
+						text : [
+							{
+								title : 'Russian',
+								value : 200
+							}
+						],
+						itemStyle : {
+								color: '#A752FD'
+						}
+					},
+					{
+						name : 'India',
+						text : [
+							{
+								title : 'Indian Accent English',
+								value : 300
+							}
+						],
+						itemStyle : {
+								color: '#BF48FB'
+						}
+					},
+					{
+						name : 'United Kingdom',
+						text : [
+							{
+								title : 'British English',
+								value : 300
+							}
+						],
+						itemStyle : {
+								color: '#945BAE'
+						}
+					},
+					{
+						name : 'United States',
+						text : [
+							{
+								title : 'American English',
+								value : 300
+							}
+						],
+						itemStyle : {
+								color: '#5840E8'
+						}
+					},
+					{
+						name : 'France',
+						text : [
+							{
+								title : 'French',
+								value : 200
+							}
+						],
+						itemStyle : {
+								color: '#AC8EFF'
+						}
+					},
 				]
 			}]
 		};

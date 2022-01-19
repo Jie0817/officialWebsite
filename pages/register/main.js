@@ -47,6 +47,28 @@
  			ruleFormRef: null
  		})
 
+		// 验证码
+		const vCodeData = reactive({
+			loading : false,
+			disabled : false,
+			text : '发送验证码'
+		})
+
+		const sendVCode = () => {
+			vCodeData.disabled = true
+			let countDown = 60
+			vCodeData.text = countDown + '秒后重新发送'
+			let down = setInterval(function(){
+				vCodeData.text = `${--countDown}秒后重新发送`
+				if(countDown === 0){
+					vCodeData.disabled = false
+					vCodeData.text = '重新发送'
+					clearInterval(down)
+				}
+			},1000)
+			
+		}
+
  		const submitForm = (fromValue) => {
  			fromValue.validate((valid) => {
  				if (valid) {
@@ -86,6 +108,8 @@
  			})
  		}
  		return {
+			vCodeData,
+			sendVCode,
  			...toRefs(data),
  			submitForm
  		}

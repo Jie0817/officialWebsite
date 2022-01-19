@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<script src="./../../utils/echarts.min.js"></script>
+	<script src="./../../utils/world.js"></script>
+	<script src="./../../utils/nameMap.js"></script>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+		}
+
+		body,
+		html,
+		#main {
+			height: 100%;
+			width: 100%;
+		}
+
+		.active{
+			color: #8361BB;
+			margin: 0 6px;
+			font-weight: 600;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="main"></div>
+	<script>
+		const chartDom = document.getElementById('main');
+		const myChart = echarts.init(chartDom);
+		echarts.registerMap('world', world);
+		const option = {
+			tooltip: {
+				trigger: 'item',
+				showDelay: 0,
+				transitionDuration: .5,
+				formatter: function (params) {
+					let data = params.data || {}
+					let textArr = []
+					data.text?.forEach(item => {
+						const value = (item.value + '').split('.');
+						const valueStr = value[0].replace(
+							/(\d{1,3})(?=(?:\d{3})+(?!\d))/g,
+							'$1,'
+						);
+						textArr.push(`${item.title}<span class="active">${valueStr}</span>H<br/>`)
+					})
+					return params.name + '<br/>' + textArr.join('');
+					// return params.seriesName + '<br/>' + params.name + ': ' + valueStr;
+				}
+			},
+			visualMap: {
+				show : false
+			},
+			toolbox: {
+				show: true,
+				left: 'left',
+				top: 'top',
+				feature: {
+					dataView: {
+						readOnly: false
+					},
+					restore: {},
+					saveAsImage: {}
+				}
+			},
+			series: [{
+				name: 'USA aaa',
+				nameMap,
+				type: 'map',
+				roam: true,
+				map: 'world',
+				emphasis: {
+					label: {
+						show: true
+					}
+				},
+				data: [{
+						name: '中国',
+						text: [
+							{
+								title : '天津话',
+								value : 300
+							},
+							{
+								title : '苏州话',
+								value : 370
+							},
+							{
+								title : '川式普通话',
+								value : 300
+							},
+							{
+								title : '口音粤语',
+								value : 300
+							},
+							{
+								title : '长沙话',
+								value : 300
+							},
+							{
+								title : '蒙语',
+								value : 500
+							},
+							{
+								title : '青岛话',
+								value : 300
+							}
+						],
+						itemStyle: {
+								color: '#8361BB'
+						}
+					},
+					{
+						name: '德国',
+						text : [
+							{
+								title : '德语',
+								value : 500
+							}
+						],
+						itemStyle: {
+								color: '#BCAADA'
+						}
+					},
+					{
+						name: '意大利',
+						text : [
+							{
+								title : '意大利语',
+								value : 200
+							}
+						],
+						itemStyle: {
+								color: '#9981FF'
+						}
+					},
+					{
+						name : '葡萄牙',
+						text : [
+							{
+								title : '葡语',
+								value : 700
+							}
+						],
+						itemStyle: {
+								color: '#DD8BC0'
+						}
+					},
+					{
+						name : '西班牙',
+						text : [
+							{
+								title : '西语',
+								value : 900
+							}
+						],
+						itemStyle: {
+								color: '#AB70AC'
+						}
+					},
+					{
+						name : '挪威',
+						text : [
+							{
+								title : '挪威语',
+								value : 200
+							}
+						],
+						itemStyle : {
+								color: '#8361BB'
+						}
+					},
+					{
+						name : '瑞典',
+						text : [
+							{
+								title : '瑞典语',
+								value : 200
+							}
+						],
+						itemStyle : {
+								color: '#8361BB'
+						}
+					},
+					{
+						name : '丹麦',
+						text : [
+							{
+								title : '丹麦语',
+								value : 200
+							}
+						],
+						itemStyle : {
+								color: '#8361BB'
+						}
+					},
+					{
+						name : '芬兰',
+						text : [
+							{
+								title : '芬兰语',
+								value : 200
+							}
+						],
+						itemStyle : {
+								color: '#8361BB'
+						}
+					},
+					{
+						name : '冰岛',
+						text : [
+							{
+								title : '冰岛语',
+								value : 100
+							}
+						],
+						itemStyle : {
+								color: '#AB70AC'
+						}
+					},
+					{
+						name : '波兰',
+						text : [
+							{
+								title : '波兰语',
+								value : 200
+							}
+						],
+						itemStyle : {
+								color: '#ECC1FF'
+						}
+					},
+					{
+						name : '沙特阿拉伯',
+						text : [
+							{
+								title : '阿拉伯语',
+								value : 100
+							}
+						],
+						itemStyle : {
+								color: '#8361BB'
+						}
+					},
+					{
+						name : '泰国',
+						text : [
+							{
+								title : '泰语',
+								value : 300
+							}
+						],
+						itemStyle : {
+								color: '#9981FF'
+						}
+					},
+					{
+						name : '土耳其',
+						text : [
+							{
+								title : '土耳其语',
+								value : 100
+							}
+						],
+						itemStyle : {
+								color: '#DFA5FB'
+						}
+					},
+					{
+						name : '匈牙利',
+						text : [
+							{
+								title : '匈牙利语',
+								value : 100
+							}
+						],
+						itemStyle : {
+								color: '#CE77F9'
+						}
+					},
+					{
+						name : '格鲁吉亚',
+						text : [
+							{
+								title : '格鲁吉亚语',
+								value : 100
+							}
+						],
+						itemStyle : {
+								color: '#A752FD'
+						}
+					},
+					{
+						name : '以色列',
+						text : [
+							{
+								title : '希伯来语',
+								value : 100
+							}
+						],
+						itemStyle : {
+								color: '#ECC1FF'
+						}
+					},
+					{
+						name : '孟加拉国',
+						text : [
+							{
+								title : '孟加拉语',
+								value : 100
+							}
+						],
+						itemStyle : {
+								color: '#DFA5FB'
+						}
+					},
+					{
+						name : '尼泊尔',
+						text : [
+							{
+								title : '尼泊尔语',
+								value : 100
+							}
+						],
+						itemStyle : {
+								color: '#F3DFFD'
+						}
+					},
+					{
+						name : '缅甸',
+						text : [
+							{
+								title : '缅甸语',
+								value : 100
+							}
+						],
+						itemStyle : {
+								color: '#BF48FB'
+						}
+					},
+					{
+						name : '马来西亚',
+						text : [
+							{
+								title : '马来西亚语',
+								value : 100
+							}
+						],
+						itemStyle : {
+								color: '#DD8BC0'
+						}
+					},
+					{
+						name : '捷克',
+						text : [
+							{
+								title : '捷克语',
+								value : 100
+							}
+						],
+						itemStyle : {
+								color: '#BCAADA'
+						}
+					},
+					{
+						name : '罗马尼亚',
+						text : [
+							{
+								title : '罗马尼亚语',
+								value : 100
+							}
+						],
+						itemStyle : {
+								color: '#945BAE'
+						}
+					},
+					{
+						name : '肯尼亚',
+						text : [
+							{
+								title : '斯瓦西里语',
+								value : 100
+							}
+						],
+						itemStyle : {
+								color: '#CE77F9'
+						}
+					},
+					{
+						name : '韩国',
+						text : [
+							{
+								title : '韩语',
+								value : 200
+							}
+						],
+						itemStyle : {
+								color: '#AC8EFF'
+						}
+					},
+					{
+						name : '日本本土',
+						text : [
+							{
+								title : '日语',
+								value : 300
+							}
+						],
+						itemStyle : {
+								color: '#F3DFFD'
+						}
+					},
+					{
+						name : '俄罗斯',
+						text : [
+							{
+								title : '俄语',
+								value : 200
+							}
+						],
+						itemStyle : {
+								color: '#A752FD'
+						}
+					},
+					{
+						name : '印度',
+						text : [
+							{
+								title : '印度口音英语',
+								value : 300
+							}
+						],
+						itemStyle : {
+								color: '#BF48FB'
+						}
+					},
+					{
+						name : '英国',
+						text : [
+							{
+								title : '英式英语',
+								value : 300
+							}
+						],
+						itemStyle : {
+								color: '#945BAE'
+						}
+					},
+					{
+						name : '美国',
+						text : [
+							{
+								title : '美式英语',
+								value : 300
+							}
+						],
+						itemStyle : {
+								color: '#5840E8'
+						}
+					},
+					{
+						name : '法国',
+						text : [
+							{
+								title : '法语',
+								value : 200
+							}
+						],
+						itemStyle : {
+								color: '#AC8EFF'
+						}
+					},
+				]
+			}]
+		};
+		myChart.setOption(option);
+
+		option && myChart.setOption(option);
+	</script>
+</body>
+
+</html>

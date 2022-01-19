@@ -219,7 +219,7 @@
 			pubCenter.loading = true
 			let data = {
 				pageNum : num,
-				pageSize : 10
+				pageSize : 8
 			}
 			service.post('/web/project/listByUser', data).then(res => {
 				console.log(res)
@@ -289,6 +289,8 @@
 				text: '正在修改...',
 				background: 'rgba(0, 0, 0, 0.7)',
 			})
+
+			console.log(pubCenter.detailsData.projectRequirement);
 			service.post(`/web/project/updateProject`,pubCenter.detailsData).then(res => {
 				console.log(res) 
 				loading.close()
@@ -436,7 +438,7 @@
 			collCenter.loading = true
 			let data = {
 				pageNum : num,
-				pageSize : 10
+				pageSize : 8
 			}
 			service.post('/web/collect/list', data).then(res => {
 				console.log(res)

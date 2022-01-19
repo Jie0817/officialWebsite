@@ -5,7 +5,7 @@ const { createProxyMiddleware } = require('http-proxy-middleware');
 
 // proxy middleware options
 const options = {
-  target: 'http://949ihv.natappfree.cc', // target host
+  target: 'http://8782ag.natappfree.cc', // target host
   changeOrigin: true, // needed for virtual hosted sites
   ws: true, // proxy websockets
   pathRewrite: {'^/api' : '/'}

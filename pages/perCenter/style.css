@@ -73,6 +73,7 @@
 /* 表格 */
 .el-table .cell{
 	text-align: center;
+	padding: 0 6px;
 }
 /* 查看 */
 .see-ruleForm .el-radio__input.is-disabled .el-radio__inner{

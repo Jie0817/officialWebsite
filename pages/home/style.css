@@ -130,10 +130,19 @@ span{
 	color: #999;
 	font-weight: bold;
 }
+.table-list-open .el-textarea{
+	width: 500px;
+	display: initial;
+}
+.table-list-open .el-textarea__inner{
+	display: inline-block;
+	border: 0;
+	padding: 0;
+}
 .el-table .cell{
 	text-align: center;
+	padding: 0 6px;
 }
-
 /* 分页 */
 .pagination{
 	width: 100%;
